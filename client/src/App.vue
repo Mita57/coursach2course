@@ -13,7 +13,7 @@
             <v-spacer></v-spacer>
 
             <v-toolbar-items>
-                <v-btn text class=" white--text" to="/account">Войти</v-btn>
+                <v-btn text class=" white--text" to="/login">Войти</v-btn>
             </v-toolbar-items>
         </v-app-bar>
 
@@ -32,9 +32,7 @@
         name: 'App',
         data() {
             return {
-                user: 'Войти',
-                channels: [],
-                auth_result: ''
+
             }
         },
         methods: {
