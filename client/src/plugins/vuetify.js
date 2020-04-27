@@ -9,6 +9,13 @@ export default new Vuetify({
     iconfont: 'mdi',
   },
   theme:{
-    dark:true,
+    themes: {
+      light: {
+        primary: '#7e3179',
+        secondary: '#b0bec5',
+        accent: '#f5e2a7',
+        error: '#b71c1c',
+      },
+    },
   }
 });
