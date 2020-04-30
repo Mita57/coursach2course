@@ -2,27 +2,34 @@
     <v-app>
         <!-- Header -->
         <v-app-bar app class="primary white--text" absolute short fixed clipped-right>
-            <router-link to="/">
-                <img class="mr-3 mt-1" :src="require('./assets/bready.jpg')" height="50"/>
-            </router-link>
-            <v-toolbar-title class="headline" dark>
-                <router-link style="color: white; text-decoration: none" to="/"><span>bReady</span></router-link>
-            </v-toolbar-title>
-            <v-toolbar-items class="ml-4">
+            </v-btn>
+            <v-toolbar-items class="ml-n8">
+                <v-btn o="/" text class="font-weight-bold" style="background-color: #f5e2a7; color: #7e3179">
+                    <img class="mr-3 mt-1" :src="require('./assets/bready.jpg')" height="50"/> bReady</v-btn>
                 <!--Admin(mom <3)-->
-                <v-btn v-if="$store.state.type=='admin'" to="/dayPlanAdmin" text class=" white--text">План на день</v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/minorEquipment" text class=" white--text">Учет мелкой фигни!!!!!!!!</v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/majorEquipment" text class=" white--text">Учет оборудования</v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/recipesAdmin" text class=" white--text">Рецепты и ТТК</v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/dayPlanAdmin" text class=" white--text">План на день
+                </v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/minorEquipment" text class=" white--text">Учет мелкой
+                    фигни!!!!!!!!
+                </v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/majorEquipment" text class=" white--text">Учет
+                    оборудования
+                </v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/recipesAdmin" text class=" white--text">Рецепты и ТТК
+                </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/employees" text class=" white--text">Сотрудники</v-btn>
 
                 <!--cashier-->
-                <v-btn v-if="$store.state.type=='cashier'" to="/onlineOrders" text class=" white--text">Заказы онлайн</v-btn>
-                <v-btn v-if="$store.state.type=='cashier'" to="/kitchenSituation" text class=" white--text">Кухня</v-btn>
+                <v-btn v-if="$store.state.type=='cashier'" to="/onlineOrders" text class=" white--text">Заказы онлайн
+                </v-btn>
+                <v-btn v-if="$store.state.type=='cashier'" to="/kitchenSituation" text class=" white--text">Кухня
+                </v-btn>
 
                 <!--baker-->
-                <v-btn v-if="$store.state.type=='baker'" to="/dayPlanBaker" text class=" white--text">План на день</v-btn>
-                <v-btn v-if="$store.state.type=='baker'" to="/recipesBaker" text class=" white--text">Рецепты и ТТК</v-btn>
+                <v-btn v-if="$store.state.type=='baker'" to="/dayPlanBaker" text class=" white--text">План на день
+                </v-btn>
+                <v-btn v-if="$store.state.type=='baker'" to="/recipesBaker" text class=" white--text">Рецепты и ТТК
+                </v-btn>
                 <v-btn v-if="$store.state.type=='baker'" to="/instructions" text class=" white--text">Инструкции</v-btn>
 
             </v-toolbar-items>
@@ -49,12 +56,9 @@
     export default {
         name: 'App',
         data() {
-            return {
-            }
+            return {}
         },
-        methods: {
-
-        },
+        methods: {},
 
     };
 </script>

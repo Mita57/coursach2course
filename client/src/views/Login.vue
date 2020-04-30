@@ -5,26 +5,59 @@
                       placeholder="Логин" onchange="checkInputs()"><br></v-text-field>
         <v-text-field outlined type="password" clearable v-model="pwrd" background-color="white"
                       placeholder="Пароль" onchange="checkInputs()"><br></v-text-field>
-        <v-btn large class="primary" disabled id="button" v-model="loginButton" @click="login">Войти</v-btn>
+        <v-btn large class="primary" :disabled="isDisabled" id="button" v-model="loginButton" @click="login">Войти
+        </v-btn>
+        {{result}}
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Login",
         data() {
             return {
                 pwrd: '',
-                username: ''
+                username: '',
+                result: '',
             }
         },
         methods: {
-            checkInputs() {
-                if(this.pwrd.length > 3 && this.username.length > 3) {
-                    this.loginButton.disabled = false;
-                }
-                else {
-                    this.loginButton.disabled = true;
+            login() {
+                const aw = this;
+                axios({
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                    },
+                    method: 'post',
+                    url: 'http://localhost:5000/login',
+                    data: {
+                        login: aw.login,
+                        pwrd: aw.pwrd
+                    },
+                }).then(function (response) {
+                    if (response.data.result == 'fail') {
+                        aw.result = 'Неправильное имя пользователя или пароль';
+                    } else {
+                        this.$store.state.username = aw.login;
+                        this.$store.state.type = response.data.type;
+                        router.push('/');
+                    }
+                })
+                    .catch(function (response) {
+                        //handle error
+                        console.log(response);
+                    })
+            }
+        }
+        ,
+        computed: {
+            isDisabled() {
+                if (this.pwrd.length > 3 && this.username.length > 3) {
+                    return false;
+                } else {
+                    return true;
                 }
             }
         }
