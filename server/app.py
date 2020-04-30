@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
+from passlib.hash import sha256_crypt
 import datetime
 
 app = Flask(__name__)
 CORS(app)
+
 
 
 @app.route('/login', methods=['POST'])
@@ -48,7 +50,6 @@ def register():
         return jsonify(result='good')
     except:
         return jsonify(result='bad')
-
 
 
 @app.route('/channel')

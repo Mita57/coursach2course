@@ -1,10 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+
 Vue.use(Vuex);
-const storeData = {
-}
 
-// initialise Vuex
-export const store = new Vuex.Store(storeData);
+export const store = new Vuex.Store({
+    state: {
+        username: '',
+        type:'admin',
+        loggedIn:false
+    },
+    mutations: {
+        login (name, type) {
+            this.username = name;
+            this.type = type;
+            this.loggedIn = true;
+        },
 
-export default store
+        logout() {
+            this.username = '';
+            this.type = '';
+            this.loggedIn = false;
+        }
+    }
+})
+
+export default store;
