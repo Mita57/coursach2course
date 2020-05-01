@@ -7,12 +7,11 @@ class AbstractClassError(Exception):
 
 
 class SQLModel:
-    _TABLE = None
-    _DATABASE = None
-    _USER = None
-    _PASSWORD = None
-    _HOST = None
-    _PORT = None
+    _DATABASE = 'bakery'
+    _USER = 'postgres'
+    _PASSWORD = 'postgres'
+    _HOST = 'localhost'
+    _PORT = '5432'
 
     def __init__(self):
         raise AbstractClassError

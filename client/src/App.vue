@@ -30,7 +30,7 @@
                 </v-btn>
                 <v-btn v-if="$store.state.type=='baker'" to="/recipesBaker" text class=" white--text">Рецепты и ТТК
                 </v-btn>
-                <v-btn v-if="$store.state.type=='baker'" to="/instructions" text class=" white--text">Инструкции</v-btn>
+                <v-btn v-if="$store.state.type=='baker'" to="/instructions" text class=" white--text">Чек-лист</v-btn>
 
             </v-toolbar-items>
             <v-spacer></v-spacer>

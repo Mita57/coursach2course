@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from passlib.hash import sha256_crypt
+from models.BasicModel import SQLModel
 import datetime
 
 app = Flask(__name__)
 CORS(app)
-
 
 
 @app.route('/login', methods=['POST'])
@@ -16,9 +16,9 @@ def login():
     Returns: JSON with auth result info
     """
     data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-    user = User.get_by_attrs(('nickname', 'password'), 'email', email)
+    email = data.get('login')
+    password = data.get('pwrd')
+    user = SQLModel.get_by_attrs(('nickname', 'password'), 'login', login)
     print(user)
     try:
         user_pw = user[0][1]
