@@ -4,16 +4,14 @@
         <v-app-bar app class="primary white--text" absolute short fixed clipped-right>
             </v-btn>
             <v-toolbar-items class="ml-n8">
-                <v-btn o="/" text class="font-weight-bold" style="background-color: #f5e2a7; color: #7e3179">
+                <v-btn to="/info" text class="font-weight-bold" style="background-color: #f5e2a7; color: #7e3179">
                     <img class="mr-3 mt-1" :src="require('./assets/bready.jpg')" height="50"/> bReady</v-btn>
                 <!--Admin(mom <3)-->
                 <v-btn v-if="$store.state.type=='admin'" to="/dayPlanAdmin" text class=" white--text">План на день
                 </v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/minorEquipment" text class=" white--text">Учет мелкой
-                    фигни!!!!!!!!
+                <v-btn v-if="$store.state.type=='admin'" to="/minorEquipment" text class=" white--text">Инвентарь
                 </v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/majorEquipment" text class=" white--text">Учет
-                    оборудования
+                <v-btn v-if="$store.state.type=='admin'" to="/majorEquipment" text class=" white--text">Оборудование
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/recipesAdmin" text class=" white--text">Рецепты и ТТК
                 </v-btn>

@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         username: '',
-        type:'cashier',
+        type:'admin',
         loggedIn:false
     },
     mutations: {
