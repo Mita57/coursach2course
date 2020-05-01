@@ -7,7 +7,7 @@
             <h1>Добро пожаловать на bReady</h1>
         </v-container>
         <v-container>
-            Для продолжения авторизируйтесь в системе
+            Для продолжения авторизуйтесь в системе
         </v-container>
         <v-container>
             <v-btn large class="primary" to="login">Войти в систему</v-btn>

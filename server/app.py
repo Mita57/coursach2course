@@ -18,13 +18,14 @@ def login():
     data = request.get_json()
     email = data.get('login')
     password = data.get('pwrd')
-    user = SQLModel.get_by_attrs(('nickname', 'password'), 'login', login)
-    print(user)
+    user = SQLModel.get_by_attrs(('login', 'pwrdHasg', 'type', 'name'), 'users', 'login', login)
     try:
+        user_login = user[0][0]
         user_pw = user[0][1]
-        user_nick = user[0][0]
-        if password == user_pw:
-            return jsonify(result=user_nick)
+        user_type = user[0][2]
+        user_name = user[0][3]
+        if sha256_crypt.verify(password, user_pw):
+            return jsonify(result=user_login, type=user_type, name=user_name)
         else:
             return jsonify(result='fail')
     except:
@@ -41,7 +42,8 @@ def register():
     """
     post_data = request.get_json()
     print(post_data)
-    today = str(datetime.datetime.now().year) + '-' + str(datetime.datetime.now().month) + '-' + str(datetime.datetime.now().day)
+    today = str(datetime.datetime.now().year) + '-' + str(datetime.datetime.now().month) + '-' + str(
+        datetime.datetime.now().day)
     email = post_data.get('email')
     password = post_data.get('password')
     nickname = post_data.get('nickname')
@@ -61,10 +63,10 @@ def get_channel():
     """
     nick = request.args.get('nickname')
     print(nick)
-    stuff = User.get_by_attrs(cols=('nickname', 'subs', 'description', 'curr_hub'), attr_cols='nickname', attr_values=nick)
+    stuff = User.get_by_attrs(cols=('nickname', 'subs', 'description', 'curr_hub'), attr_cols='nickname',
+                              attr_values=nick)
     print(stuff)
     return jsonify(stuff)
-
 
 
 if __name__ == '__main__':
