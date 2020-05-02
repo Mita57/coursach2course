@@ -60,6 +60,9 @@
                     return true;
                 }
             }
+        },
+        created() {
+            document.title = 'Вход в систему';
         }
     }
 

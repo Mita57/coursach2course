@@ -11,7 +11,10 @@
 
 <script>
     export default {
-        name: "Invalid"
+        name: "Invalid",
+        created() {
+            document.title = 'Неверная ссылка';
+        }
     }
 </script>
 

@@ -30,6 +30,9 @@
             return {}
         },
         methods: {},
+        created() {
+            document.title = 'bReady';
+        }
 
     };
 </script>

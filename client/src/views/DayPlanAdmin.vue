@@ -1,7 +1,15 @@
 <template id="cock">
     <div id="sas" class="mt-4 ml-2">
         <div id="table">
-            <v-data-table :headers="headers" :items="items" class="elevation-2">
+            <v-data-table hide-default-footer disable-pagination :height="tableHeight"  :headers="headers" :items="items"
+                          class="elevation-2">
+                <template v-slot:item.image="{ item }">
+                    <div class="p-2">
+                        <v-avatar class="profile" color="grey" size="100" tile>
+                            <v-img :src="item.image" he></v-img>
+                        </v-avatar>
+                    </div>
+                </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
                         <v-spacer></v-spacer>
@@ -23,6 +31,9 @@
                                                 <v-text-field v-model="editedItem.amount"
                                                               label="Количество"></v-text-field>
                                             </v-col>
+                                            <v-file-input accept="image/png, image/jpeg, image/bmp"
+                                                          placeholder="Добавьте изображение" prepend-icon="mdi-camera"
+                                                          label="Изображение"></v-file-input>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -52,21 +63,22 @@
 
         <div id="sidebar" class="mr-3">
             <div>
-                <v-date-picker class="elevation-4" full-width id="date" v-model="date" :events="arrayEvents" event-color="#7e3179" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
+                <v-date-picker class="elevation-4" full-width id="date" v-model="date" :events="arrayEvents"
+                               event-color="#7e3179" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
             </div>
             <template>
                 <div class="text-center">
-                    <v-menu  top :offset-y="true">
+                    <v-menu top :offset-y="true">
                         <template v-slot:activator="{ on }">
                             <v-btn large id="standard" color="primary" class="mt-4 elevation-3" dark v-on="on">
                                 Стандартный
                             </v-btn>
                         </template>
                         <v-list>
-                            <v-list-item  @click="uploadDefault()">
+                            <v-list-item @click="uploadDefault()">
                                 <v-list-item-title>Выгрузить</v-list-item-title>
                             </v-list-item>
-                            <v-list-item  to="/changeDayPlan">
+                            <v-list-item to="/changeDayPlan">
                                 <v-list-item-title>Изменить</v-list-item-title>
                             </v-list-item>
                         </v-list>
@@ -85,20 +97,93 @@
         data() {
             return {
                 dialog: false,
+                tableHeight: 0,
                 headers: [
+                    {text: '', align: 'start', value: 'image'}, //img
                     {text: 'Название', align: 'start', value: 'name'},
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                items: [],
+                items: [
+                    {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    },
+                    {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    },
+                    {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    },
+                    {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    }, {
+                        image: require('../assets/bready_intro.jpg'),
+                        name: 'cock',
+                        amount: 3,
+                    },
+                ],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 0
+                    amount: 0,
+                    image: '',
                 },
                 defaultItem: {
                     name: '',
-                    amount: 0
+                    amount: 0,
+                    image: '',
                 },
                 date: new Date().toISOString().substr(0, 10),
                 arrayEvents: [`${new Date().getFullYear()}-12-31`,
@@ -107,7 +192,7 @@
                     `${new Date().getFullYear()}-03-08`,
                     `${new Date().getFullYear()}-09-01`,
                     `${new Date().getFullYear()}-04-04`, // easter
-                    ]
+                ]
             }
         },
         methods: {
@@ -121,7 +206,7 @@
                 const index = this.items.indexOf(item)
                 confirm('Удалить?') && this.items.splice(index, 1)
             },
-            save () {
+            save() {
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.editedItem)
                 } else {
@@ -129,7 +214,7 @@
                 }
                 this.close()
             },
-            close () {
+            close() {
                 this.dialog = false
                 this.$nextTick(() => {
                     this.editedItem = Object.assign({}, this.defaultItem)
@@ -141,7 +226,25 @@
             },
             savePlan() {
                 throw 'not implemented';
+            },
+            getTableHeight() {
+                if (window.innerHeight < 600) {
+                    this.tableHeight = window.innerHeight * 0.75;
+                } else if (window.innerHeight < 800) {
+                    this.tableHeight = window.innerHeight * 0.8;
+                }
+                else {
+                    this.tableHeight = window.innerHeight * 0.85;
+                }
             }
+        },
+        created() {
+            document.title = 'Планы на день';
+            window.addEventListener("resize", this.getTableHeight);
+            this.getTableHeight();
+        },
+        destroyed() {
+            window.removeEventListener("resize", this.getTableHeight);
         },
     }
 </script>
@@ -153,6 +256,12 @@
         float: left;
     }
 
+    #table::-webkit-scrollbar {
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+
+
     #sidebar {
         width: 30%;
         height: 90%;
@@ -162,11 +271,12 @@
     #date {
         width: 100%;
     }
+
     #standard {
         width: 100%;
     }
+
     #saveButton {
         width: 100%;
     }
-
 </style>
