@@ -1,7 +1,7 @@
 <template id="cock">
     <div id="sas" class="mt-4 ml-2">
         <div id="table">
-            <v-data-table :headers="headers" :items="items" class="elevation-1">
+            <v-data-table :headers="headers" :items="items" class="elevation-2">
                 <template v-slot:top>
                     <v-toolbar flat color="white">
                         <v-spacer></v-spacer>
@@ -28,8 +28,8 @@
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                                    <v-btn color="blue darken-1" text @click="close">Отменить</v-btn>
+                                    <v-btn color="blue darken-1" text @click="save">Сохранить</v-btn>
                                 </v-card-actions>
 
                             </v-card>
@@ -50,34 +50,31 @@
             </v-data-table>
         </div>
 
-        <div id="buttons" class="mr-3 elevation-1">
-            <template >
-                <div class="text-center" id="standard">
-                    <v-menu top :offset-y="true">
+        <div id="sidebar" class="mr-3">
+            <div>
+                <v-date-picker class="elevation-4" full-width id="date" v-model="date" :events="arrayEvents" event-color="#7e3179" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
+            </div>
+            <template>
+                <div class="text-center">
+                    <v-menu  top :offset-y="true">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark v-on="on">
+                            <v-btn large id="standard" color="primary" class="mt-4 elevation-3" dark v-on="on">
                                 Стандартный
                             </v-btn>
                         </template>
                         <v-list>
-                            <v-list-item  @click="">
+                            <v-list-item  @click="uploadDefault()">
                                 <v-list-item-title>Выгрузить</v-list-item-title>
                             </v-list-item>
-                            <v-list-item  @click="">
+                            <v-list-item  to="/changeDayPlan">
                                 <v-list-item-title>Изменить</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
                 </div>
             </template>
-            <div id="date">
-                <v-date-picker v-model="date" :events="arrayEvents" event-color="green lighten-1" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
-            </div>
-            <v-btn id="saveButton">Сохранить</v-btn>
+            <v-btn large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
         </div>
-
-
-
     </div>
 
 </template>
@@ -139,6 +136,12 @@
                     this.editedIndex = -1
                 })
             },
+            uploadDefault() {
+                throw 'not Implemented';
+            },
+            savePlan() {
+                throw 'not implemented';
+            }
         },
     }
 </script>
@@ -146,16 +149,24 @@
 <style scoped>
     #table {
         height: 90%;
-        width: 70%;
+        width: 68%;
         float: left;
     }
 
-    #buttons {
-        width: 25%;
+    #sidebar {
+        width: 30%;
         height: 90%;
         float: right;
-        display: grid;
     }
 
+    #date {
+        width: 100%;
+    }
+    #standard {
+        width: 100%;
+    }
+    #saveButton {
+        width: 100%;
+    }
 
 </style>
