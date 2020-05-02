@@ -1,5 +1,5 @@
 <template id="cock">
-    <div id="sas" class="mt-4">
+    <div id="sas" class="mt-4 ml-2">
         <div id="table">
             <v-data-table :headers="headers" :items="items" class="elevation-1">
                 <template v-slot:top>
@@ -50,7 +50,7 @@
             </v-data-table>
         </div>
 
-        <div id="buttons">
+        <div id="buttons" class="mr-3 elevation-1">
             <template >
                 <div class="text-center" id="standard">
                     <v-menu top :offset-y="true">
@@ -70,8 +70,16 @@
                     </v-menu>
                 </div>
             </template>
+            <div id="date">
+                <v-date-picker v-model="date" :events="arrayEvents" event-color="green lighten-1" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
+            </div>
+            <v-btn id="saveButton">Сохранить</v-btn>
         </div>
+
+
+
     </div>
+
 </template>
 
 <script>
@@ -94,7 +102,15 @@
                 defaultItem: {
                     name: '',
                     amount: 0
-                }
+                },
+                date: new Date().toISOString().substr(0, 10),
+                arrayEvents: [`${new Date().getFullYear()}-12-31`,
+                    `${new Date().getFullYear()}-02-14`,
+                    `${new Date().getFullYear()}-02-23`,
+                    `${new Date().getFullYear()}-03-08`,
+                    `${new Date().getFullYear()}-09-01`,
+                    `${new Date().getFullYear()}-04-04`, // easter
+                    ]
             }
         },
         methods: {
@@ -129,19 +145,17 @@
 
 <style scoped>
     #table {
-        margin: auto;
         height: 90%;
-        width: 80%;
+        width: 70%;
+        float: left;
     }
 
     #buttons {
-        width: 100%;
-        height: 5%;
+        width: 25%;
+        height: 90%;
+        float: right;
         display: grid;
-        grid-template-columns: 10% 20% 10% 20% 10% 20% 10%;
     }
 
-    #standard {
-        grid-column: 2;
-    }
+
 </style>
