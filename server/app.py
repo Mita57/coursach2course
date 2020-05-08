@@ -18,7 +18,7 @@ def login():
     data = request.get_json()
     email = data.get('login')
     password = data.get('pwrd')
-    user = SQLModel.get_by_attrs(('login', 'pwrdHasg', 'type', 'name'), 'users', 'login', login)
+    user = SQLModel.get_by_attrs(('login', 'pwrdHash', 'type', 'name'), 'users', 'login', login)
     try:
         user_login = user[0][0]
         user_pw = user[0][1]
