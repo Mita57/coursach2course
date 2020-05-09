@@ -1,7 +1,7 @@
 <template>
     <div id="outer" class="mt-4 ml-2">
         <div id="table">
-            <v-data-table hide-default-footer disable-pagination :height="tableHeight" :headers="headers" :items="items"
+            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight" :headers="headers" :items="items"
                           class="elevation-2">
                 <template v-slot:item.image="{ item }">
                     <div class="p-2">

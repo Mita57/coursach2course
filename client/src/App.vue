@@ -9,9 +9,9 @@
                 <!--Admin(mom <3)-->
                 <v-btn v-if="$store.state.type=='admin'" to="/dayPlanAdmin" text class=" white--text">План на день
                 </v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/minorEquipment" text class=" white--text">Инвентарь
+                <v-btn v-if="$store.state.type=='admin'" to="/inventory" text class=" white--text">Инвентарь
                 </v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/majorEquipment" text class=" white--text">Оборудование
+                <v-btn v-if="$store.state.type=='admin'" to="/equipment" text class=" white--text">Оборудование
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/recipesAdmin" text class=" white--text">Рецепты и ТТК
                 </v-btn>

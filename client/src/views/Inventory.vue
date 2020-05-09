@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-4 ml-2">
+    <div id="sas" class="mt-4 ml-2">
         <div id="table">
             <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight"  :headers="headers" :items="items"
                           class="elevation-2">
@@ -60,40 +60,12 @@
                 </template>
             </v-data-table>
         </div>
-
-        <div id="sidebar" class="mr-3">
-            <div>
-                <v-date-picker class="elevation-4" full-width id="date" v-model="date" :events="arrayEvents"
-                               event-color="#7e3179" locale="ru-RU" :first-day-of-week="1"></v-date-picker>
-            </div>
-            <template>
-                <div class="text-center">
-                    <v-menu top :offset-y="true">
-                        <template v-slot:activator="{ on }">
-                            <v-btn large id="standard" color="primary" class="mt-4 elevation-3" dark v-on="on">
-                                Стандартный
-                            </v-btn>
-                        </template>
-                        <v-list id="v-list">
-                            <v-list-item @click="uploadDefault()">
-                                <v-list-item-title>Выгрузить</v-list-item-title>
-                            </v-list-item>
-                            <v-list-item to="/dayPlanAdmin/changeDayPlan">
-                                <v-list-item-title>Изменить</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </div>
-            </template>
-            <v-btn tile large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
-        </div>
     </div>
-
 </template>
 
 <script>
     export default {
-        name: "DayPlanAdmin",
+        name: "Inventory",
         data() {
             return {
                 dialog: false,
@@ -240,7 +212,7 @@
             }
         },
         created() {
-            document.title = 'Планы на день';
+            document.title = 'Инвентарь';
             window.addEventListener("resize", this.getTableHeight);
             this.getTableHeight();
         },
@@ -251,35 +223,5 @@
 </script>
 
 <style scoped>
-    #table {
-        height: 90%;
-        width: 68%;
-        float: left;
-    }
-
-
-        #sidebar {
-        width: 30%;
-        height: 90%;
-        float: right;
-    }
-
-    #date {
-        width: 100%;
-    }
-
-    #standard {
-        width: 100%;
-    }
-
-    #saveButton {
-        width: 100%;
-    }
-
-    #v-list {
-        background-color: #f5e2a7;
-    }
-
-
 
 </style>
