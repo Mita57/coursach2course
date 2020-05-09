@@ -62,13 +62,14 @@
         </div>
 
         <div id="buttons">
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
+            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3" @click="cancelClick()">Отмена</v-btn>
+            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveDefaultPlan()">Сохранить</v-btn>
         </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "ChangeDefaultDayPlan",
         data() {
@@ -199,6 +200,14 @@
                 else {
                     this.tableHeight = window.innerHeight * 0.7;
                 }
+            },
+            cancelClick() {
+                if(confirm('Отменить изменения?')) {
+                    router.push('/dayPlanAdmin');
+                }
+            },
+            saveDefaultPlan() {
+                throw 'Not implemented';
             }
         },
         created() {
@@ -224,5 +233,9 @@
         width: 80%;
         margin: auto;
         justify-content: space-around;
+    }
+
+    .bts {
+        width: 150px;
     }
 </style>

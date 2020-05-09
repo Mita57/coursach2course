@@ -78,7 +78,7 @@
                             <v-list-item @click="uploadDefault()">
                                 <v-list-item-title>Выгрузить</v-list-item-title>
                             </v-list-item>
-                            <v-list-item to="/changeDayPlan">
+                            <v-list-item to="/dayPlanAdmin/changeDayPlan">
                                 <v-list-item-title>Изменить</v-list-item-title>
                             </v-list-item>
                         </v-list>

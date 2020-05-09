@@ -48,7 +48,7 @@ const router = new Router({
             beforeEnter: isAdmin,
         },
         {
-            path: '/changeDayPlan',
+            path: '/dayPlanAdmin/changeDayPlan',
             name: 'ChangeDayPlan',
             component: ChangeDefaultDayPlan,
             beforeEnter: isAdmin
