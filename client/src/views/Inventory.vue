@@ -1,7 +1,8 @@
 <template>
-    <div id="sas" class="mt-4 ml-2">
+    <div class="mt-4 ml-2">
         <div id="table">
-            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight"  :headers="headers" :items="items"
+            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight" :headers="headers"
+                          :items="items"
                           class="elevation-2">
                 <template v-slot:item.image="{ item }">
                     <div class="p-2">
@@ -19,7 +20,7 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="headline">Продукт</span>
+                                    <span class="headline">Предмет</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
@@ -59,6 +60,15 @@
                     <div>Нет данных</div>
                 </template>
             </v-data-table>
+        </div>
+
+        <div id="buttons">
+            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
+                   @click="cancelClick()">Отмена
+            </v-btn>
+            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveInventory()">
+                Сохранить
+            </v-btn>
         </div>
     </div>
 </template>
@@ -194,20 +204,21 @@
                     this.editedIndex = -1
                 })
             },
-            uploadDefault() {
-                throw 'not Implemented';
-            },
-            savePlan() {
+            saveInventory() {
                 throw 'not implemented';
             },
             getTableHeight() {
                 if (window.innerHeight < 600) {
-                    this.tableHeight = window.innerHeight * 0.75;
+                    this.tableHeight = window.innerHeight * 0.6;
                 } else if (window.innerHeight < 800) {
-                    this.tableHeight = window.innerHeight * 0.8;
+                    this.tableHeight = window.innerHeight * 0.65;
+                } else {
+                    this.tableHeight = window.innerHeight * 0.7;
                 }
-                else {
-                    this.tableHeight = window.innerHeight * 0.85;
+            },
+            cancelClick() {
+                if (confirm('Отменить изменения?')) {
+                    location.reload();
                 }
             }
         },
@@ -222,6 +233,22 @@
     }
 </script>
 
-<style scoped>
 
+<style scoped>
+    #table {
+        width: 80%;
+        margin: auto;
+        height: 10%;
+    }
+
+    #buttons {
+        display: flex;
+        width: 80%;
+        margin: auto;
+        justify-content: space-around;
+    }
+
+    .bts {
+        width: 150px;
+    }
 </style>
