@@ -15,7 +15,7 @@
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on">Добавить</v-btn>
+                                <v-btn tile color="primary" dark class="mb-2" v-on="on">Добавить</v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -74,7 +74,7 @@
                                 Стандартный
                             </v-btn>
                         </template>
-                        <v-list>
+                        <v-list id="v-list">
                             <v-list-item @click="uploadDefault()">
                                 <v-list-item-title>Выгрузить</v-list-item-title>
                             </v-list-item>
@@ -85,7 +85,7 @@
                     </v-menu>
                 </div>
             </template>
-            <v-btn large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
+            <v-btn tile large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
         </div>
     </div>
 
@@ -205,7 +205,7 @@
 
             deleteItem(item) {
                 const index = this.items.indexOf(item)
-                confirm('Удалить?') && this.items.splice(index, 1)
+                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1)
             },
             save() {
                 if (this.editedIndex > -1) {
@@ -275,4 +275,11 @@
     #saveButton {
         width: 100%;
     }
+
+    #v-list {
+        background-color: #f5e2a7;
+    }
+
+
+
 </style>
