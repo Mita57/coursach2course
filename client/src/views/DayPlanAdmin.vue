@@ -190,6 +190,7 @@
                     `${new Date().getFullYear()}-02-14`,
                     `${new Date().getFullYear()}-02-23`,
                     `${new Date().getFullYear()}-03-08`,
+                    `${new Date().getFullYear()}-05-09`,
                     `${new Date().getFullYear()}-09-01`,
                     `${new Date().getFullYear()}-04-04`, // easter
                 ]
@@ -256,13 +257,8 @@
         float: left;
     }
 
-    #table::-webkit-scrollbar {
-        width: 6px;
-        background-color: #F5F5F5;
-    }
 
-
-    #sidebar {
+        #sidebar {
         width: 30%;
         height: 90%;
         float: right;

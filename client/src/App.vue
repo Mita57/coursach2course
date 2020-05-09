@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <!-- Header -->
-        <v-app-bar app class="primary white--text" absolute short fixed clipped-right>
+        <v-app-bar app class="primary white--text" absolute short fixed>
             </v-btn>
             <v-toolbar-items class="ml-n8">
                 <v-btn to="/info" text class="font-weight-bold" style="background-color: #f5e2a7; color: #7e3179">
@@ -62,4 +62,13 @@
 </script>
 
 <style>
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 5px grey;
+        width: 6px;
+        background: #7e3179;
+    }
+
 </style>
