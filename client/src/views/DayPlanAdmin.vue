@@ -219,7 +219,8 @@
 
             deleteItem(item) {
                 const index = this.items.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1)
+                const globalIndex = this.gloalItems.indexOf(item)
+                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
                 if (this.editedIndex > -1) {

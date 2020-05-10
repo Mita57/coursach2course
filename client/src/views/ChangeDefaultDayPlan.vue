@@ -1,7 +1,8 @@
 <template>
     <div class="mt-4 ml-2">
         <div id="table">
-            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight" :headers="headers" :items="items"
+            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight" :headers="headers"
+                          :items="items"
                           class="elevation-2">
                 <template v-slot:item.image="{ item }">
                     <div class="p-2">
@@ -12,7 +13,9 @@
                 </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
-                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2" append-icon="mdi-magnify" dense outlined label="Поиск"  hide-details></v-text-field>
+                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2"
+                                      append-icon="mdi-magnify" dense outlined label="Поиск"
+                                      hide-details></v-text-field>
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
@@ -63,19 +66,24 @@
         </div>
 
         <div id="buttons">
-            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3" @click="cancelClick()">Отмена</v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveDefaultPlan()">Сохранить</v-btn>
+            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
+                   @click="cancelClick()">Отмена
+            </v-btn>
+            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveDefaultPlan()">
+                Сохранить
+            </v-btn>
         </div>
     </div>
 </template>
 
 <script>
     import router from "../router";
+
     export default {
         name: "ChangeDefaultDayPlan",
         data() {
             return {
-                search:'',
+                search: '',
                 dialog: false,
                 tableHeight: 0,
                 headers: [
@@ -84,10 +92,10 @@
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                items: [
+                globalItems: [
                     {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'dick',
                         amount: 3,
                     },
                     {
@@ -154,6 +162,7 @@
                         amount: 3,
                     },
                 ],
+                items: [],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -171,12 +180,16 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
+
+                this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
+                this.searchFieldChanged();
                 this.dialog = true
             },
 
             deleteItem(item) {
                 const index = this.items.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1)
+                const globalIndex = this.gloalItems.indexOf(item)
+                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
                 if (this.editedIndex > -1) {
@@ -198,18 +211,22 @@
                     this.tableHeight = window.innerHeight * 0.6;
                 } else if (window.innerHeight < 800) {
                     this.tableHeight = window.innerHeight * 0.65;
-                }
-                else {
+                } else {
                     this.tableHeight = window.innerHeight * 0.7;
                 }
             },
             cancelClick() {
-                if(confirm('Отменить изменения?')) {
+                if (confirm('Отменить изменения?')) {
                     router.push('/dayPlanAdmin');
                 }
             },
             saveDefaultPlan() {
                 throw 'Not implemented';
+            },
+            searchFieldChanged() {
+                this.items = (this.globalItems.filter(obj => {
+                    return obj.name.includes(this.search);
+                }))
             }
         },
         created() {
@@ -220,6 +237,9 @@
         destroyed() {
             window.removeEventListener("resize", this.getTableHeight);
         },
+        mounted() {
+            this.items = this.globalItems;
+        }
     }
 </script>
 

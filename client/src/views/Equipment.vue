@@ -13,6 +13,9 @@
                 </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
+                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2"
+                                      append-icon="mdi-magnify" dense outlined label="Поиск"
+                                      hide-details></v-text-field>
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
@@ -66,7 +69,7 @@
             <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
                    @click="cancelClick()">Отмена
             </v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveEquipment()">
+            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveInventory()">
                 Сохранить
             </v-btn>
         </div>
@@ -78,6 +81,7 @@
         name: "Equipment",
         data() {
             return {
+                search: '',
                 dialog: false,
                 tableHeight: 0,
                 headers: [
@@ -86,7 +90,7 @@
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                items: [
+                globalItems: [
                     {
                         image: require('../assets/bready_intro.jpg'),
                         name: 'cock',
@@ -156,6 +160,7 @@
                         amount: 3,
                     },
                 ],
+                items: [],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -182,12 +187,16 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
+
+                this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
+                this.searchFieldChanged();
                 this.dialog = true
             },
 
             deleteItem(item) {
                 const index = this.items.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1)
+                const globalIndex = this.gloalItems.indexOf(item)
+                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
                 if (this.editedIndex > -1) {
@@ -204,7 +213,7 @@
                     this.editedIndex = -1
                 })
             },
-            saveEquipment() {
+            saveInventory() {
                 throw 'not implemented';
             },
             getTableHeight() {
@@ -223,13 +232,16 @@
             }
         },
         created() {
-            document.title = 'Оборудование';
+            document.title = 'Инвентарь';
             window.addEventListener("resize", this.getTableHeight);
             this.getTableHeight();
         },
         destroyed() {
             window.removeEventListener("resize", this.getTableHeight);
         },
+        mounted() {
+            this.items = this.globalItems;
+        }
     }
 </script>
 
