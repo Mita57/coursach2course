@@ -217,18 +217,23 @@
                 throw 'not implemented';
             },
             getTableHeight() {
-                if (window.innerHeight < 600) {
-                    this.tableHeight = window.innerHeight * 0.6;
-                } else if (window.innerHeight < 800) {
+                if (window.innerHeight <= 600) {
                     this.tableHeight = window.innerHeight * 0.65;
-                } else {
+                } else if (window.innerHeight < 800) {
                     this.tableHeight = window.innerHeight * 0.7;
+                } else {
+                    this.tableHeight = window.innerHeight * 0.75;
                 }
             },
             cancelClick() {
                 if (confirm('Отменить изменения?')) {
                     location.reload();
                 }
+            },
+            searchFieldChanged() {
+                this.items = (this.globalItems.filter(obj => {
+                    return obj.name.includes(this.search);
+                }))
             }
         },
         created() {

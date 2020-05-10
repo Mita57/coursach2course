@@ -207,7 +207,7 @@
                 })
             },
             getTableHeight() {
-                if (window.innerHeight < 600) {
+                if (window.innerHeight <= 600) {
                     this.tableHeight = window.innerHeight * 0.6;
                 } else if (window.innerHeight < 800) {
                     this.tableHeight = window.innerHeight * 0.65;

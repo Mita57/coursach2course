@@ -62,7 +62,7 @@ const router = new Router({
             beforeEnter: isAdmin
         },
         {
-            path: 'equipment',
+            path: '/equipment',
             name: 'Equipment',
             component: Equipment,
             beforeEnter: isAdmin
