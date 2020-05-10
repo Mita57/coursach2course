@@ -1,7 +1,8 @@
 <template>
     <div class="mt-4 ml-2">
         <div id="table">
-            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight"  :headers="headers" :items="items"
+            <v-data-table fixed-header hide-default-footer disable-pagination :height="tableHeight" :headers="headers"
+                          :items="items"
                           class="elevation-2">
                 <template v-slot:item.image="{ item }">
                     <div class="p-2">
@@ -12,7 +13,14 @@
                 </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
+                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2"
+                                      append-icon="mdi-magnify" dense outlined label="Поиск"
+                                      hide-details></v-text-field>
                         <v-spacer></v-spacer>
+                        <v-btn tile color="accent" style="color: #7e3179" dark class="mb-2 mr-2" @click="cancelClick()">
+                            Отменить
+                        </v-btn>
+                        <v-btn tile color="primary" dark class="mb-2 mr-2" @click="emptyList()">Отчистить</v-btn>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
                                 <v-btn tile color="primary" dark class="mb-2" v-on="on">Добавить</v-btn>
@@ -85,7 +93,8 @@
                     </v-menu>
                 </div>
             </template>
-            <v-btn tile large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить</v-btn>
+            <v-btn tile large id="saveButton" color="primary" class="mt-3 elevation-3" @click="savePlan()">Сохранить
+            </v-btn>
         </div>
     </div>
 
@@ -96,6 +105,7 @@
         name: "DayPlanAdmin",
         data() {
             return {
+                search: '',
                 dialog: false,
                 tableHeight: 0,
                 headers: [
@@ -104,76 +114,77 @@
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                items: [
+                globalItems: [
                     {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'owo',
                         amount: 3,
                     },
                     {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     },
                     {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     },
                     {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     }, {
                         image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
+                        name: 'lol',
                         amount: 3,
                     },
                 ],
+                items: [],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -200,6 +211,9 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
+
+                this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
+                this.searchFieldChanged();
                 this.dialog = true
             },
 
@@ -233,11 +247,26 @@
                     this.tableHeight = window.innerHeight * 0.75;
                 } else if (window.innerHeight < 800) {
                     this.tableHeight = window.innerHeight * 0.8;
-                }
-                else {
+                } else {
                     this.tableHeight = window.innerHeight * 0.85;
                 }
+            },
+            emptyList() {
+                if (confirm('Отчистить список?')) {
+                    this.items = [];
+                }
+            },
+            searchFieldChanged() {
+                this.items = (this.globalItems.filter(obj => {
+                    return obj.name.includes(this.search);
+                }))
+            },
+            cancelClick() {
+                if (confirm('Отменить изменения?')) {
+                    location.reload();
+                }
             }
+
         },
         created() {
             document.title = 'Планы на день';
@@ -247,6 +276,9 @@
         destroyed() {
             window.removeEventListener("resize", this.getTableHeight);
         },
+        mounted() {
+            this.items = this.globalItems;
+        }
     }
 </script>
 
@@ -257,8 +289,7 @@
         float: left;
     }
 
-
-        #sidebar {
+    #sidebar {
         width: 30%;
         height: 90%;
         float: right;
@@ -279,7 +310,6 @@
     #v-list {
         background-color: #f5e2a7;
     }
-
 
 
 </style>

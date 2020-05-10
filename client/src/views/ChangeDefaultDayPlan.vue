@@ -12,6 +12,7 @@
                 </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
+                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2" append-icon="mdi-magnify" dense outlined label="Поиск"  hide-details></v-text-field>
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
@@ -74,6 +75,7 @@
         name: "ChangeDefaultDayPlan",
         data() {
             return {
+                search:'',
                 dialog: false,
                 tableHeight: 0,
                 headers: [
