@@ -8,6 +8,7 @@ import DayPlanAdmin from "./views/DayPlanAdmin";
 import ChangeDefaultDayPlan from "./views/ChangeDefaultDayPlan";
 import Inventory from "./views/Inventory";
 import Equipment from "./views/Equipment";
+import DayPlanBaker from "./views/DayPlanBaker";
 
 Vue.use(Router);
 
@@ -66,6 +67,12 @@ const router = new Router({
             name: 'Equipment',
             component: Equipment,
             beforeEnter: isAdmin
+        },
+        {
+            path:'/dayPlanBaker',
+            name: 'DayPlanBaker',
+            component: DayPlanBaker,
+            beforeEnter: isBaker
         },
         {
             path: '*',

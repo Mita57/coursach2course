@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         username: '',
-        type:'admin',
+        type:'baker',
         loggedIn:false
     },
     mutations: {
