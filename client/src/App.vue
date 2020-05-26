@@ -13,7 +13,7 @@
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/equipment" text class=" white--text">Оборудование
                 </v-btn>
-                <v-btn v-if="$store.state.type=='admin'" to="/recipesAdmin" text class=" white--text">Рецепты и ТТК
+                <v-btn v-if="$store.state.type=='admin'" to="/recipes" text class=" white--text">Рецепты и ТТК
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/employees" text class=" white--text">Сотрудники</v-btn>
 
