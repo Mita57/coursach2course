@@ -9,6 +9,7 @@ import ChangeDefaultDayPlan from "./views/ChangeDefaultDayPlan";
 import Inventory from "./views/Inventory";
 import Equipment from "./views/Equipment";
 import DayPlanBaker from "./views/DayPlanBaker";
+import Recipes from "./views/Recipes";
 
 Vue.use(Router);
 
@@ -66,6 +67,12 @@ const router = new Router({
             path: '/equipment',
             name: 'Equipment',
             component: Equipment,
+            beforeEnter: isAdmin
+        },
+        {
+            path: '/recipes',
+            name: 'Recipes',
+            component: Recipes,
             beforeEnter: isAdmin
         },
         {
