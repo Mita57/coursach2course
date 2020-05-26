@@ -1,5 +1,5 @@
 <template>
-    <div id="list" class="mt-2 elevation-4">
+    <div id="list" class="mt-4 elevation-4">
         <v-list three-line v-scroll :style="listStyle">
             <template v-for="(item, index) in items">
                 <v-subheader v-if="item.header" :key="item.header" v-text="item.header"></v-subheader>
@@ -134,9 +134,9 @@
                 if (window.innerHeight <= 600) {
                     this.listStyle = 'height: ' + window.innerHeight * 0.87 + 'px';
                 } else if (window.innerHeight < 800) {
-                    this.listStyle = 'height: ' + window.innerHeight * 0.9 + 'px';
+                    this.listStyle = 'height: ' + window.innerHeight * 0.89 + 'px';
                 } else {
-                    this.listStyle = 'height: ' + window.innerHeight * 0.92 + 'px';
+                    this.listStyle = 'height: ' + window.innerHeight * 0.91 + 'px';
                 }
             },
         },
