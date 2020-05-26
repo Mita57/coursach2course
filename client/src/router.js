@@ -11,6 +11,7 @@ import Equipment from "./views/Equipment";
 import DayPlanBaker from "./views/DayPlanBaker";
 import Recipes from "./views/Recipes";
 import Employees from "./views/Employees";
+import RecipesBaker from "./views/RecipesBaker";
 
 Vue.use(Router);
 
@@ -87,6 +88,12 @@ const router = new Router({
             name: 'DayPlanBaker',
             component: DayPlanBaker,
             beforeEnter: isBaker
+        },
+        {
+          path: '/recipesBaker',
+          name: 'RecipesBaker',
+          component: RecipesBaker,
+          beforeEnter: isBaker
         },
         {
             path: '*',

@@ -1,8 +1,5 @@
 <template>
     <div id="list" class="mt-4 elevation-4">
-        <v-btn absolute dark fab bottom class="mb-12" right color="primary">
-            <v-icon>mdi-plus</v-icon>
-        </v-btn>
         <v-list three-line v-scroll :style="listStyle">
             <template v-for="(item, index) in items">
                 <v-subheader v-if="item.header" :key="item.header" v-text="item.header"></v-subheader>
@@ -27,7 +24,7 @@
 
 <script>
     export default {
-        name: "Employees",
+        name: "RecipesBaker",
         data: () => ({
             items: [
                 {
@@ -132,7 +129,6 @@
             ],
             listStyle: '',
         }),
-        // TODO: need to do this as well
         methods: {
             getListStyle() {
                 if (window.innerHeight <= 600) {
