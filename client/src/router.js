@@ -12,6 +12,10 @@ import DayPlanBaker from "./views/DayPlanBaker";
 import Recipes from "./views/Recipes";
 import Employees from "./views/Employees";
 import RecipesBaker from "./views/RecipesBaker";
+import CheckList from "./views/CheckList";
+import OnlineOrders from "./views/OnlineOrders";
+import KitchenSituation from "./views/KitchenSituation";
+import Profile from "./views/Profile";
 
 Vue.use(Router);
 
@@ -96,6 +100,30 @@ const router = new Router({
           beforeEnter: isBaker
         },
         {
+            path: '/checklist',
+            name: 'CheckList',
+            component: CheckList,
+            beforeEnter: isBaker
+        },
+        {
+            path: '/onlineOrders',
+            name: 'OnlineOrders',
+            component: OnlineOrders,
+            beforeEnter: isCashier
+        },
+        {
+            path: '/kitchenSituation',
+            name: 'KitchenSituation',
+            component: KitchenSituation,
+            beforeEnter: isCashier
+        },
+        {
+            path: '/profile',
+            name: 'Profile',
+            component: Profile,
+            beforeEnter: isAuth
+        },
+        {
             path: '*',
             component: Invalid
         },
@@ -115,6 +143,14 @@ const isCashier = (to, from, next) => {
     if (store.state.type == 'cashier') {
         next();
         return
+    }
+    next('/invalid');recipesBaker
+}
+
+const isAuth = (to, from, next) => {
+    if(store.state.loggedIn) {
+        next();
+        return;
     }
     next('/invalid');
 }
