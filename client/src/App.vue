@@ -36,7 +36,11 @@
 
             <v-toolbar-items>
                 <v-btn v-if="!$store.state.loggedIn" text class=" white--text" to="/login">Войти</v-btn>
-                <v-btn v-else text class=" white--text" to="/profile">{{user}}</v-btn>
+                <v-btn v-else text class=" white--text" to="/profile">
+                    <v-avatar v-if="$store.state.loggedIn" class="mr-2" style="margin-top: -3px" color="grey"  >
+                        <v-img :src="require('./assets/bready.jpg')"></v-img>
+                    </v-avatar>
+                    {{$store.state.username}}</v-btn>
             </v-toolbar-items>
         </v-app-bar>
 
