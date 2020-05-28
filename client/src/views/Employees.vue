@@ -30,7 +30,7 @@
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-select :items="userTypes" v-model="editedItem.type" label="Тип учетной записи" dense solo/>
+                                <v-select :items="userTypes" v-model="editedItem.type" label="Тип учетной записи" solo/>
                             </v-col>
                         </v-row>
                         <v-row>

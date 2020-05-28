@@ -6,14 +6,15 @@
                           class="elevation-2">
                 <template v-slot:item.image="{ item }">
                     <div class="p-2">
-                        <v-avatar class="profile" color="grey" size="100" tile>
-                            <v-img :src="item.image" he></v-img>
+                        <v-avatar class="profile" color="white" size="100" tile>
+                            <v-img :src="item.image"></v-img>
                         </v-avatar>
                     </div>
                 </template>
                 <template v-slot:top>
                     <v-toolbar flat color="white">
-                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2" append-icon="mdi-magnify" dense outlined label="Поиск" hide-details />
+                        <v-text-field v-model="search" @input="searchFieldChanged()" class="mb-2"
+                                      append-icon="mdi-magnify" dense outlined label="Поиск" hide-details/>
                         <v-spacer></v-spacer>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
@@ -21,26 +22,28 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="headline">Предмет</span>
+                                    <span class="headline">Предмет инвентаря</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
+                                            <v-col>
+                                                <v-text-field v-model="editedItem.name" ref="editName" label="Название"/>
                                             </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.amount"
-                                                              label="Количество"></v-text-field>
-                                            </v-col>
-                                            <v-file-input accept="image/png, image/jpeg, image/bmp"
-                                                          placeholder="Добавьте изображение" prepend-icon="mdi-camera"
-                                                          label="Изображение"></v-file-input>
                                         </v-row>
+                                        <v-row>
+                                            <v-col>
+                                                <v-text-field v-model="editedItem.amount" label="Количество"/>
+                                            </v-col>
+                                        </v-row>
+                                        <v-file-input accept="image/png, image/jpeg, image/bmp"
+                                                      placeholder="Добавьте изображение" prepend-icon="mdi-camera"
+                                                      label="Изображение"></v-file-input>
+
                                     </v-container>
                                 </v-card-text>
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
+                                    <v-spacer/>
                                     <v-btn color="blue darken-1" text @click="close">Отменить</v-btn>
                                     <v-btn color="blue darken-1" text @click="save">Сохранить</v-btn>
                                 </v-card-actions>
@@ -197,12 +200,18 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.editedItem)
-                } else {
-                    this.items.push(this.editedItem)
+                if (this.$refs.editName.value != '') {
+                    this.$refs.editName.error = false;
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                    } else {
+                        this.items.push(this.editedItem)
+                    }
+                    this.close()
                 }
-                this.close()
+                else {
+                    this.$refs.editName.error = true;
+                }
             },
             close() {
                 this.dialog = false

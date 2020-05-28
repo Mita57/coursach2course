@@ -28,16 +28,18 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.amount"
-                                                              label="Количество"></v-text-field>
-                                            </v-col>
+                                            <v-text-field v-model="editedItem.name" ref="editName" label="Название"/>
+                                        </v-row>
+                                        <v-row>
+
+                                            <v-text-field v-model="editedItem.amount"
+                                                          label="Количество"></v-text-field>
+                                        </v-row>
+                                        <v-row>
                                             <v-file-input accept="image/png, image/jpeg, image/bmp"
                                                           placeholder="Добавьте изображение" prepend-icon="mdi-camera"
-                                                          label="Изображение"></v-file-input>
+                                                          label="Изображение"/>
+                                        </v-row>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -199,12 +201,18 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.editedItem)
-                } else {
-                    this.items.push(this.editedItem)
+                if (this.$refs.editName.value != '') {
+                    this.$refs.editName.error = false;
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                    } else {
+                        this.items.push(this.editedItem)
+                    }
+                    this.close()
                 }
-                this.close()
+                else {
+                    this.$refs.editName.error = true;
+                }
             },
             close() {
                 this.dialog = false

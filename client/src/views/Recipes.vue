@@ -14,16 +14,32 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="editedItem.amount"
-                                              label="Количество"></v-text-field>
-                            </v-col>
+                            <v-text-field v-model="editedItem.name" label="Название"/>
+                        </v-row>
+                        <v-row>
+                            <v-text-field v-model="editedItem.amount"
+                                          label="Количество"/>
+                        </v-row>
+                        <v-row>
+                            <v-text-field v-model="editedItem.weight"
+                                          label="Вес"/>
+                        </v-row>
+                        <v-row>
+                            <v-select :items="doughTypes" v-model="editedItem.type" label="Тип теста"
+                                      solo/>
+                        </v-row>
+                        <v-row>
+                            <v-select :items="bakingProgs" v-model="editedItem.bakingProg" label="Программа"
+                                      solo/>
+                        </v-row>
+                        <v-row>
+                            <v-select :items="ovenTypes" v-model="editedItem.bakingProg" label="Тип печки"
+                                      solo/>
+                        </v-row>
+                        <v-row>
                             <v-file-input accept="image/png, image/jpeg, image/bmp"
                                           placeholder="Добавьте изображение" prepend-icon="mdi-camera"
-                                          label="Изображение"></v-file-input>
+                                          label="Изображение"/>
                         </v-row>
                     </v-container>
                 </v-card-text>
@@ -167,15 +183,25 @@
             dialog: false,
             listStyle: '',
             editedIndex: -1,
+            doughTypes: ['Дрожжевое', 'Дрожжевое сдобное', 'Песочное', 'Слоеное', 'Заварное', 'Бисквитное', 'Жидкое'],
+            ovenTypes: ['подовая', 'конвекционная', 'пицца'],
             editedItem: {
                 name: '',
-                amount: 0,
-                image: '',
+                dough: '',
+                amount: 0, // на противень
+                weight: 0,
+                bakingProg: '', //idk
+                ovenType: '',
+                img: new Blob()
             },
             defaultItem: {
                 name: '',
-                amount: 0,
-                image: '',
+                dough: '',
+                amount: 0, // на противень
+                weight: 0,
+                bakingProg: '', //idk
+                ovenType: '',
+                img: new Blob()
             },
         }),
         methods: {
