@@ -5,13 +5,16 @@
             </v-btn>
             <v-toolbar-items class="ml-n8">
                 <v-btn to="/info" text class="font-weight-bold" style="background-color: #f5e2a7; color: #7e3179">
-                    <img class="mr-3 mt-1" :src="require('./assets/bready.jpg')" height="50"/> bReady</v-btn>
+                    <img class="mr-3 mt-1" :src="require('./assets/bready.jpg')" height="50"/> bReady
+                </v-btn>
                 <!--Admin(mom <3)-->
                 <v-btn v-if="$store.state.type=='admin'" to="/dayPlanAdmin" text class=" white--text">План на день
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/inventory" text class=" white--text">Инвентарь
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/equipment" text class=" white--text">Оборудование
+                </v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/bakingprogs" text class=" white--text">Программы выпечки
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/recipes" text class=" white--text">Рецепты и ТТК
                 </v-btn>
@@ -37,10 +40,11 @@
             <v-toolbar-items>
                 <v-btn v-if="!$store.state.loggedIn" text class=" white--text" to="/login">Войти</v-btn>
                 <v-btn v-else text class=" white--text" to="/profile">
-                    <v-avatar v-if="$store.state.loggedIn" class="mr-2" style="margin-top: -3px" color="grey"  >
+                    <v-avatar v-if="$store.state.loggedIn" class="mr-2" style="margin-top: -3px" color="grey">
                         <v-img :src="require('./assets/bready.jpg')"></v-img>
                     </v-avatar>
-                    {{$store.state.username}}</v-btn>
+                    {{$store.state.username}}
+                </v-btn>
             </v-toolbar-items>
         </v-app-bar>
 
@@ -69,6 +73,7 @@
     ::-webkit-scrollbar {
         width: 6px;
     }
+
     ::-webkit-scrollbar-thumb {
         box-shadow: inset 0 0 5px grey;
         width: 6px;

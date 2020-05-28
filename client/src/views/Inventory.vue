@@ -28,15 +28,15 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.name" ref="editName" label="Название"/>
+                                                <v-text-field dense v-model="editedItem.name" ref="editName" label="Название"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.amount" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount" label="Количество"/>
                                             </v-col>
                                         </v-row>
-                                        <v-file-input accept="image/png, image/jpeg, image/bmp"
+                                        <v-file-input dense accept="image/png, image/jpeg, image/bmp"
                                                       placeholder="Добавьте изображение" prepend-icon="mdi-camera"
                                                       label="Изображение"></v-file-input>
 

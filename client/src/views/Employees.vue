@@ -15,22 +15,22 @@
                     <v-container>
                         <v-row>
                             <v-col>
-                                <v-text-field v-model="editedItem.name" label="Имя"/>
+                                <v-text-field dense v-model="editedItem.name" label="Имя"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-text-field v-model="editedItem.email" type="email" label="Email"/>
+                                <v-text-field dense v-model="editedItem.email" type="email" label="Email"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-text-field v-model="editedItem.pwrd" type="password" label="Пароль"/>
+                                <v-text-field dense v-model="editedItem.pwrd" type="password" label="Пароль"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-select :items="userTypes" v-model="editedItem.type" label="Тип учетной записи" solo/>
+                                <v-select dense :items="userTypes" v-model="editedItem.type" label="Тип учетной записи" solo/>
                             </v-col>
                         </v-row>
                         <v-row>

@@ -33,12 +33,12 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.name" ref="editName" label="Название"/>
+                                                <v-text-field dense v-model="editedItem.name" ref="editName" label="Название"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field v-model="editedItem.amount" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount" label="Количество"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>

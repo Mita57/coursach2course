@@ -16,6 +16,7 @@ import CheckList from "./views/CheckList";
 import OnlineOrders from "./views/OnlineOrders";
 import KitchenSituation from "./views/KitchenSituation";
 import Profile from "./views/Profile";
+import BakingProgs from "./views/BakingProgs";
 
 Vue.use(Router);
 
@@ -73,6 +74,12 @@ const router = new Router({
             path: '/equipment',
             name: 'Equipment',
             component: Equipment,
+            beforeEnter: isAdmin
+        },
+        {
+            path: '/bakingProgs',
+            name: 'BakingProgs',
+            component: BakingProgs,
             beforeEnter: isAdmin
         },
         {
