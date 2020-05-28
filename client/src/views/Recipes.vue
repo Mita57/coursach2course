@@ -10,43 +10,51 @@
             <v-card>
                 <v-card-title>
                     <span class="headline">Рецепт</span>
+                    <v-divider style="visibility: hidden"/>
+                    <v-btn tile color="primary">Перейти к шагам</v-btn>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-text-field v-model="editedItem.name" label="Название"/>
+                            <v-text-field dense v-model="editedItem.name" label="Название"/>
                         </v-row>
                         <v-row>
-                            <v-text-field v-model="editedItem.amount"
+                            <v-text-field  dense v-model="editedItem.amount"
                                           label="Количество"/>
                         </v-row>
                         <v-row>
-                            <v-text-field v-model="editedItem.weight"
+                            <v-text-field dense v-model="editedItem.weight"
                                           label="Вес"/>
                         </v-row>
                         <v-row>
-                            <v-select :items="doughTypes" v-model="editedItem.type" label="Тип теста"
+                            <v-text-field dense v-model="editedItem.description"
+                                          label="Описание"/>
+                        </v-row>
+                        <v-row>
+                            <v-select  :items="doughTypes" v-model="editedItem.doughType" label="Тип теста" dense
                                       solo/>
                         </v-row>
                         <v-row>
-                            <v-select :items="bakingProgs" v-model="editedItem.bakingProg" label="Программа"
+                            <v-select :items="bakingProgs" v-model="editedItem.bakingProg" label="Программа" dense
                                       solo/>
                         </v-row>
                         <v-row>
-                            <v-select :items="ovenTypes" v-model="editedItem.bakingProg" label="Тип печки"
+                            <v-select :items="ovenTypes" v-model="editedItem.ovenType" label="Тип печки" dense
                                       solo/>
                         </v-row>
                         <v-row>
-                            <v-file-input accept="image/png, image/jpeg, image/bmp"
+                            <v-file-input dense accept="image/png, image/jpeg, image/bmp"
                                           placeholder="Добавьте изображение" prepend-icon="mdi-camera"
                                           label="Изображение"/>
+                        </v-row>
+                        <v-row>
                         </v-row>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Отменить</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Сохранить</v-btn>
+                    <v-btn color="primary" text @click="close">Отменить</v-btn>
+                    <v-btn color="primary" text @click="save">Сохранить</v-btn>
                 </v-card-actions>
 
             </v-card>
@@ -59,7 +67,7 @@
                 <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
 
                 <v-list-item v-else :key="item.title" @click="">
-                    <v-list-item-avatar>
+                    <v-list-item-avatar size="100px" tile>
                         <v-img :src="item.avatar"></v-img>
                     </v-list-item-avatar>
 
@@ -76,7 +84,7 @@
 
 <script>
     export default {
-        // TODO; dialog
+        // TODO; steps dialog
         name: "Recipes",
         data: () => ({
             items: [
@@ -185,12 +193,14 @@
             editedIndex: -1,
             doughTypes: ['Дрожжевое', 'Дрожжевое сдобное', 'Песочное', 'Слоеное', 'Заварное', 'Бисквитное', 'Жидкое'],
             ovenTypes: ['подовая', 'конвекционная', 'пицца'],
+            bakingProgs: [],
             editedItem: {
                 name: '',
-                dough: '',
+                doughType: '',
                 amount: 0, // на противень
                 weight: 0,
                 bakingProg: '', //idk
+                description: '',
                 ovenType: '',
                 img: new Blob()
             },
@@ -200,6 +210,7 @@
                 amount: 0, // на противень
                 weight: 0,
                 bakingProg: '', //idk
+                description: '',
                 ovenType: '',
                 img: new Blob()
             },
