@@ -223,12 +223,14 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.editedItem)
-                } else {
-                    this.items.push(this.editedItem)
+                if(this.editedItem.name != '') {
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                    } else {
+                        this.items.push(this.editedItem)
+                    }
+                    this.close()
                 }
-                this.close()
             },
             close() {
                 this.dialog = false
