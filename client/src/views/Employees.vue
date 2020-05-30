@@ -54,7 +54,7 @@
                 <v-divider v-else-if="item.divider" :key="index" :inset="item.inset"></v-divider>
 
                 <v-list-item v-else :key="item.title" @click="">
-                    <v-list-item-avatar>
+                    <v-list-item-avatar size="100px" tile>
                         <v-img :src="item.avatar"></v-img>
                     </v-list-item-avatar>
 

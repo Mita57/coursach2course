@@ -84,7 +84,7 @@
 
 <script>
     export default {
-        // TODO; steps dialog
+        // TODO; steps dialog, search bar
         name: "Recipes",
         data: () => ({
             items: [
