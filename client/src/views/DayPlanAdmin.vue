@@ -38,7 +38,7 @@
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.amount" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount" @change="validateAmount()" label="Количество"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -110,6 +110,7 @@
             return {
                 search: '',
                 dialog: false,
+                prevAmount: 1,
                 tableHeight: 0,
                 headers: [
                     {text: '', align: 'start', value: 'image'}, //img
@@ -191,12 +192,12 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 defaultItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 date: new Date().toISOString().substr(0, 10),
@@ -214,7 +215,7 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-
+                this.prevAmount = item.amount;
                 this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
                 this.searchFieldChanged();
                 this.dialog = true
@@ -239,6 +240,16 @@
                     this.$refs.editName.error = true;
                 }
             },
+            validateAmount() {
+                alert('sas');
+                if(this.$refs.editAmount.value.isNaN() || this.$refs.editAmount.value <= 0) {
+                    this.$refs.editAmount.value = this.prevAmount;
+                }
+                else {
+                    this.prevAmount = this.$refs.editAmount.value;
+                }
+            }
+            ,
             close() {
                 this.dialog = false;
                 this.editedItem.amount = 0;
