@@ -38,7 +38,7 @@
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount" @change="validateAmount()" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount"  @input="validateAmount()" label="Количество"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -241,12 +241,13 @@
                 }
             },
             validateAmount() {
-                alert('sas');
-                if(this.$refs.editAmount.value.isNaN() || this.$refs.editAmount.value <= 0) {
-                    this.$refs.editAmount.value = this.prevAmount;
+                console.log(this.prevAmount);
+                if(isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
+                    this.editedItem.amount = this.prevAmount;
+                    console.log(this.editedItem.amount);
                 }
                 else {
-                    this.prevAmount = this.$refs.editAmount.value;
+                    this.prevAmount = this.editedItem.amount;
                 }
             }
             ,
@@ -291,6 +292,8 @@
             }
 
         },
+        //TODO: a lot of validators
+        
         created() {
             document.title = 'Планы на день';
             window.addEventListener("resize", this.getTableHeight);
