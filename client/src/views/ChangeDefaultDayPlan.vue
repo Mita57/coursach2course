@@ -185,7 +185,6 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-
                 this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
                 this.searchFieldChanged();
                 this.dialog = true
@@ -197,7 +196,7 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.$refs.editName.value != '') {
+                if (this.$refs.editName.value != '' && !this.amountError) {
                     this.nameError = false;
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem)
@@ -206,7 +205,8 @@
                     }
                     this.close()
                 } else {
-                    this.nameError = true;
+                    this.nameError = false;
+                    setTimeout(() => {this.nameError = true}, 1);
                 }
             },
             close() {

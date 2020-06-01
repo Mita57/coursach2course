@@ -28,12 +28,12 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.name" ref="editName" label="Название"/>
+                                                <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.amount" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount" :error="amountError"  @input="validateAmount()" :label="changeAmountLabel"/>
                                             </v-col>
                                         </v-row>
                                         <v-file-input dense accept="image/png, image/jpeg, image/bmp"
@@ -83,6 +83,9 @@
         data() {
             return {
                 search: '',
+                changeAmountLabel: 'Количество',
+                amountError: false,
+                nameError: false,
                 dialog: false,
                 tableHeight: 0,
                 headers: [
@@ -200,8 +203,8 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.$refs.editName.value != '') {
-                    this.$refs.editName.error = false;
+                if (this.$refs.editName.value != '' && !this.amountError) {
+                    this.nameError = false;
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem)
                     } else {
@@ -210,7 +213,8 @@
                     this.close()
                 }
                 else {
-                    this.$refs.editName.error = true;
+                    this.nameError = false;
+                    setTimeout(() => {this.nameError = true}, 1);
                 }
             },
             close() {
@@ -222,6 +226,17 @@
             },
             saveInventory() {
                 throw 'not implemented';
+            },
+            validateAmount() {
+                if(isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
+                    this.amountError = false;
+                    setTimeout(() => {this.amountError = true;}, 1);
+                    this.changeAmountLabel = 'Количество должно быть числом';
+                }
+                else {
+                    this.amountError = false;
+                    this.changeAmountLabel = 'Количество';
+                }
             },
             getTableHeight() {
                 if (window.innerHeight <= 600) {

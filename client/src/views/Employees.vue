@@ -15,22 +15,22 @@
                     <v-container>
                         <v-row>
                             <v-col>
-                                <v-text-field dense v-model="editedItem.name" label="Имя"/>
+                                <v-text-field dense v-model="editedItem.name" :error="nameError" ref="editName" label="Имя"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-text-field dense v-model="editedItem.email" type="email" label="Email"/>
+                                <v-text-field dense v-model="editedItem.email" :error="emailError" ref="editEmail" type="email" label="Email"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-text-field dense v-model="editedItem.pwrd" type="password" label="Пароль"/>
+                                <v-text-field dense v-model="editedItem.pwrd" :error="pwrdError" ref="editPwrd" type="password" label="Пароль (не менее четырех символов)"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col>
-                                <v-select dense :items="userTypes" v-model="editedItem.type" label="Тип учетной записи" solo/>
+                                <v-select dense :items="userTypes" v-model="editedItem.type" :error="typeError" ref="editType" label="Тип учетной записи" solo/>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -41,7 +41,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" text @click="close">Отменить</v-btn>
-                    <v-btn color="primary" text @click="save">Сохранить</v-btn>
+                    <v-btn color="primary" text @click="validateInputs()">Сохранить</v-btn>
                 </v-card-actions>
 
             </v-card>
@@ -176,6 +176,10 @@
             ],
             userTypes: ['Администратор', 'Кассир', 'Пекарь'],
             dialog: false,
+            nameError: false,
+            emailError: false,
+            pwrdError: false,
+            typeError: false,
             listStyle: '',
             editedIndex: -1,
             editedItem: {
@@ -215,6 +219,57 @@
                 const index = this.items.indexOf(item)
                 const globalIndex = this.gloalItems.indexOf(item)
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
+            },
+            validateInputs() {
+                let nameFlag = false;
+                let emailFlag = false;
+                let pwrdFlag = false;
+                let typeFlag = false;
+
+                if(this.$refs.editName.value.length > 0) {
+                    nameFlag = true;
+                    this.nameError = false;
+                }
+                else {
+                    nameFlag = false;
+                    this.nameError = true;
+                }
+
+                let email = this.$refs.editEmail.value;
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                if(re.test(email)) {
+                    emailFlag = true;
+                    this.emailError = false;
+                }
+                else {
+                    emailFlag = false;
+                    this.emailError = true;
+                }
+
+                if(this.$refs.editPwrd.value.length >= 4) {
+                    pwrdFlag = true;
+                    this.pwrdError = false;
+                }
+                else {
+                    pwrdFlag - false;
+                    this.pwrdError = true;
+                }
+
+                if(this.$refs.editType.selectedIndex != -1) {
+                    typeFlag = true;
+                    this.typeError = false;
+                }
+                else {
+                    typeFlag = false;
+                    this.typeError = true;
+                }
+
+                if(nameFlag && emailFlag && pwrdFlag && typeFlag) {
+                    this.save();
+                }
+
+
             },
             save() {
                 if (this.editedIndex > -1) {
