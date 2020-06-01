@@ -33,12 +33,12 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.name" ref="editName" label="Название"/>
+                                                <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.amount"  @input="validateAmount()" label="Количество"/>
+                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount" :error="amountError"  @input="validateAmount()" :label="changeAmountLabel"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -109,8 +109,10 @@
         data() {
             return {
                 search: '',
+                changeAmountLabel: 'Количество',
+                amountError: false,
+                nameError: false,
                 dialog: false,
-                prevAmount: 1,
                 tableHeight: 0,
                 headers: [
                     {text: '', align: 'start', value: 'image'}, //img
@@ -211,6 +213,9 @@
                 ]
             }
         },
+        computed: {
+
+        },
         methods: {
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
@@ -228,7 +233,7 @@
             },
             save() {
                 if (this.$refs.editName.value != '') {
-                    this.$refs.editName.error = false;
+                    this.nameError = false;
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem)
                     } else {
@@ -237,17 +242,18 @@
                     this.close()
                 }
                 else {
-                    this.$refs.editName.error = true;
+                    this.nameError = true;
                 }
             },
             validateAmount() {
-                console.log(this.prevAmount);
                 if(isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
-                    this.editedItem.amount = this.prevAmount;
-                    console.log(this.editedItem.amount);
+                    this.amountError = false;
+                    setTimeout(() => {this.amountError = true;}, 1);
+                    this.changeAmountLabel = 'Количество должно быть числом';
                 }
                 else {
-                    this.prevAmount = this.editedItem.amount;
+                    this.amountError = false;
+                    this.changeAmountLabel = 'Количество';
                 }
             }
             ,
@@ -292,8 +298,6 @@
             }
 
         },
-        //TODO: a lot of validators
-        
         created() {
             document.title = 'Планы на день';
             window.addEventListener("resize", this.getTableHeight);

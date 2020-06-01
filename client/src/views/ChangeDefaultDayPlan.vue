@@ -28,13 +28,15 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.name" label="Название"></v-text-field>
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="4">
-                                                <v-text-field v-model="editedItem.amount"
-                                                              label="Количество"></v-text-field>
-                                            </v-col>
+                                            <v-text-field v-model="editedItem.name" :error="nameError" ref="editName"
+                                                          label="Название"></v-text-field>
+                                        </v-row>
+                                        <v-row>
+                                            <v-text-field v-model="editedItem.amount" ref="editAmount"
+                                                          :error="amountError" @input="validateAmount()"
+                                                          :label="changeAmountLabel"></v-text-field>
+                                        </v-row>
+                                        <v-row>
                                             <v-file-input accept="image/png, image/jpeg, image/bmp"
                                                           placeholder="Добавьте изображение" prepend-icon="mdi-camera"
                                                           label="Изображение"></v-file-input>
@@ -84,6 +86,9 @@
         data() {
             return {
                 search: '',
+                nameError: false,
+                amountError: false,
+                changeAmountLabel:'Количество',
                 dialog: false,
                 tableHeight: 0,
                 headers: [
@@ -192,12 +197,17 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.editedItem)
+                if (this.$refs.editName.value != '') {
+                    this.nameError = false;
+                    if (this.editedIndex > -1) {
+                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                    } else {
+                        this.items.push(this.editedItem)
+                    }
+                    this.close()
                 } else {
-                    this.items.push(this.editedItem)
+                    this.nameError = true;
                 }
-                this.close()
             },
             close() {
                 this.dialog = false
@@ -205,6 +215,18 @@
                     this.editedItem = Object.assign({}, this.defaultItem)
                     this.editedIndex = -1
                 })
+            },
+            validateAmount() {
+                if (isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
+                    this.amountError = false;
+                    setTimeout(() => {
+                        this.amountError = true;
+                    }, 1);
+                    this.changeAmountLabel = 'Количество должно быть числом';
+                } else {
+                    this.amountError = false;
+                    this.changeAmountLabel = 'Количество';
+                }
             },
             getTableHeight() {
                 if (window.innerHeight <= 600) {
@@ -230,7 +252,7 @@
             }
         },
         created() {
-            document.title = 'Поменять стандтартный план на день';
+            document.title = 'Поменять стандартный план на день';
             window.addEventListener("resize", this.getTableHeight);
             this.getTableHeight();
         },
