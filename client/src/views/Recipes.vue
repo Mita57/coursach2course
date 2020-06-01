@@ -16,14 +16,14 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-text-field dense v-model="editedItem.name" label="Название"/>
+                            <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
                         </v-row>
                         <v-row>
-                            <v-text-field  dense v-model="editedItem.amount"
+                            <v-text-field  dense v-model="editedItem.amount" ref="editAmount" :error="amountError"
                                           label="Количество"/>
                         </v-row>
                         <v-row>
-                            <v-text-field dense v-model="editedItem.weight"
+                            <v-text-field dense v-model="editedItem.weight" ref="editWeight" :error="weightError"
                                           label="Вес"/>
                         </v-row>
                         <v-row>
@@ -32,15 +32,15 @@
                         </v-row>
                         <v-row>
                             <v-select  :items="doughTypes" v-model="editedItem.doughType" label="Тип теста" dense
-                                      solo/>
+                                      solo ref="editDough" :error="doughError"/>
                         </v-row>
                         <v-row>
                             <v-select :items="bakingProgs" v-model="editedItem.bakingProg" label="Программа" dense
-                                      solo/>
+                                      solo ref="editProg" :error="progError"/>
                         </v-row>
                         <v-row>
                             <v-select :items="ovenTypes" v-model="editedItem.ovenType" label="Тип печки" dense
-                                      solo/>
+                                      solo ref="editOven" :error="ovenError"/>
                         </v-row>
                         <v-row>
                             <v-file-input dense accept="image/png, image/jpeg, image/bmp"
@@ -190,6 +190,12 @@
             ],
             dialog: false,
             listStyle: '',
+            nameError: false,
+            amountError: false,
+            weightError: false,
+            doughError: false,
+            progError: false,
+            ovenError: false,
             editedIndex: -1,
             doughTypes: ['Дрожжевое', 'Дрожжевое сдобное', 'Песочное', 'Слоеное', 'Заварное', 'Бисквитное', 'Жидкое'],
             ovenTypes: ['подовая', 'конвекционная', 'пицца'],
@@ -246,6 +252,8 @@
                 }
                 this.close()
             },
+            //TODO: validators
+            
             close() {
                 this.dialog = false
                 this.$nextTick(() => {
