@@ -232,7 +232,8 @@
                 }
                 else {
                     nameFlag = false;
-                    this.nameError = true;
+                    this.nameError = false;
+                    setTimeout(() => {this.nameError = true;}, 1)
                 }
 
                 let email = this.$refs.editEmail.value;
@@ -244,7 +245,8 @@
                 }
                 else {
                     emailFlag = false;
-                    this.emailError = true;
+                    this.emailError = false;
+                    setTimeout(() => {this.emailError = true;}, 1)
                 }
 
                 if(this.$refs.editPwrd.value.length >= 4) {
@@ -253,7 +255,8 @@
                 }
                 else {
                     pwrdFlag - false;
-                    this.pwrdError = true;
+                    this.pwrdError = false;
+                    setTimeout(() => {this.pwrdError = true;}, 1);
                 }
 
                 if(this.$refs.editType.selectedIndex != -1) {
@@ -262,9 +265,11 @@
                 }
                 else {
                     typeFlag = false;
-                    this.typeError = true;
+                    this.typeError = false;
+                    setTimeout(() => {this.typeError = true;}, 1);
                 }
 
+                console.log('dsasdasd');
                 if(nameFlag && emailFlag && pwrdFlag && typeFlag) {
                     this.save();
                 }
@@ -288,7 +293,7 @@
             },
         },
         created() {
-            document.title = 'Инвентарь';
+            document.title = 'Сотрудники';
             window.addEventListener("resize", this.getListStyle);
             this.getListStyle();
         },

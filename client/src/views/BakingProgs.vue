@@ -169,12 +169,12 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 defaultItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 date: new Date().toISOString().substr(0, 10),
@@ -249,7 +249,7 @@
             }
         },
         created() {
-            document.title = 'Инвентарь';
+            document.title = 'Программы выпечки';
             window.addEventListener("resize", this.getTableHeight);
             this.getTableHeight();
         },

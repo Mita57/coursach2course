@@ -324,7 +324,7 @@
             },
         },
         created() {
-            document.title = 'Инвентарь';
+            document.title = 'Рецепты и ТТК';
             window.addEventListener("resize", this.getListStyle);
             this.getListStyle();
         },

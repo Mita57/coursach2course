@@ -170,12 +170,12 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 defaultItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 date: new Date().toISOString().substr(0, 10),
@@ -224,7 +224,7 @@
                     setTimeout(() => {
                         this.amountError = true;
                     }, 1);
-                    this.changeAmountLabel = 'Количество должно быть числом';
+                    this.changeAmountLabel = 'Количество должно быть числом больше 0';
                 } else {
                     this.amountError = false;
                     this.changeAmountLabel = 'Количество';
@@ -261,7 +261,7 @@
             }
         },
         created() {
-            document.title = 'Инвентарь';
+            document.title = 'Оборудование';
             window.addEventListener("resize", this.getTableHeight);
             this.getTableHeight();
         },

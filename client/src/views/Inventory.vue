@@ -168,23 +168,14 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
                 defaultItem: {
                     name: '',
-                    amount: 0,
+                    amount: 1,
                     image: '',
                 },
-                date: new Date().toISOString().substr(0, 10),
-                arrayEvents: [`${new Date().getFullYear()}-12-31`,
-                    `${new Date().getFullYear()}-02-14`,
-                    `${new Date().getFullYear()}-02-23`,
-                    `${new Date().getFullYear()}-03-08`,
-                    `${new Date().getFullYear()}-05-09`,
-                    `${new Date().getFullYear()}-09-01`,
-                    `${new Date().getFullYear()}-04-04`, // easter
-                ]
             }
         },
         methods: {
@@ -231,7 +222,7 @@
                 if(isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
                     this.amountError = false;
                     setTimeout(() => {this.amountError = true;}, 1);
-                    this.changeAmountLabel = 'Количество должно быть числом';
+                    this.changeAmountLabel = 'Количество должно быть числом больше 0';
                 }
                 else {
                     this.amountError = false;
