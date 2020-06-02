@@ -204,8 +204,8 @@
             editedItem: {
                 name: '',
                 doughType: '',
-                amount: 0, // на противень
-                weight: 0,
+                amount: 1, // на противень
+                weight: 1,
                 bakingProg: '', //idk
                 description: '',
                 ovenType: '',
@@ -214,8 +214,8 @@
             defaultItem: {
                 name: '',
                 dough: '',
-                amount: 0, // на противень
-                weight: 0,
+                amount: 1, // на противень
+                weight: 1,
                 bakingProg: '', //idk
                 description: '',
                 ovenType: '',

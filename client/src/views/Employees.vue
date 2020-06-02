@@ -225,6 +225,7 @@
                 let emailFlag = false;
                 let pwrdFlag = false;
                 let typeFlag = false;
+                console.log(this.$refs.editType);
 
                 if(this.$refs.editName.value.length > 0) {
                     nameFlag = true;
@@ -259,7 +260,8 @@
                     setTimeout(() => {this.pwrdError = true;}, 1);
                 }
 
-                if(this.$refs.editType.selectedIndex != -1) {
+
+                if(this.$refs.editType.selectedItems.length == 1) {
                     typeFlag = true;
                     this.typeError = false;
                 }
@@ -269,7 +271,6 @@
                     setTimeout(() => {this.typeError = true;}, 1);
                 }
 
-                console.log('dsasdasd');
                 if(nameFlag && emailFlag && pwrdFlag && typeFlag) {
                     this.save();
                 }
