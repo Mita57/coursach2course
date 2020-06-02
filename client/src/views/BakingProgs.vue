@@ -24,12 +24,12 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="headline">Предмет</span>
+                                    <span class="headline">Программа</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-text-field dense v-model="editedItem.name" ref="editName" label="Название"/>
+                                            <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
                                         </v-row>
                                         <v-row>
 
@@ -165,6 +165,7 @@
                 ],
                 items: [],
                 ovens: ['Печка адын', 'Печка дыва'],
+                nameError: false,
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -203,8 +204,8 @@
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
             save() {
-                if (this.$refs.editName.value != '') {
-                    this.$refs.editName.error = false;
+                if (this.$refs.editName.value != '' && !this.amountError) {
+                    this.nameError = false;
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem)
                     } else {
@@ -213,7 +214,8 @@
                     this.close()
                 }
                 else {
-                    this.$refs.editName.error = true;
+                    this.nameError = false;
+                    setTimeout(() => {this.nameError = true}, 1);
                 }
             },
             close() {

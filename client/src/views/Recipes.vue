@@ -16,22 +16,23 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
+                            <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError"
+                                          label="Название"/>
                         </v-row>
                         <v-row>
-                            <v-text-field  dense v-model="editedItem.amount" ref="editAmount" :error="amountError"
-                                          label="Количество"/>
+                            <v-text-field dense v-model="editedItem.amount" ref="editAmount" :error="amountError"
+                                          label="Количество на противень"/>
                         </v-row>
                         <v-row>
                             <v-text-field dense v-model="editedItem.weight" ref="editWeight" :error="weightError"
-                                          label="Вес"/>
+                                          label="Вес одного"/>
                         </v-row>
                         <v-row>
                             <v-text-field dense v-model="editedItem.description"
                                           label="Описание"/>
                         </v-row>
                         <v-row>
-                            <v-select  :items="doughTypes" v-model="editedItem.doughType" label="Тип теста" dense
+                            <v-select :items="doughTypes" v-model="editedItem.doughType" label="Тип теста" dense
                                       solo ref="editDough" :error="doughError"/>
                         </v-row>
                         <v-row>
@@ -54,7 +55,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" text @click="close">Отменить</v-btn>
-                    <v-btn color="primary" text @click="save">Сохранить</v-btn>
+                    <v-btn color="primary" text @click="validateInputs">Сохранить</v-btn>
                 </v-card-actions>
 
             </v-card>
@@ -197,8 +198,8 @@
             progError: false,
             ovenError: false,
             editedIndex: -1,
-            doughTypes: ['Дрожжевое', 'Дрожжевое сдобное', 'Песочное', 'Слоеное', 'Заварное', 'Бисквитное', 'Жидкое'],
-            ovenTypes: ['подовая', 'конвекционная', 'пицца'],
+            doughTypes: ['Без теста', 'Дрожжевое', 'Дрожжевое сдобное', 'Песочное', 'Слоеное', 'Заварное', 'Бисквитное', 'Жидкое'],
+            ovenTypes: ['Подовая', 'Конвекционная', 'Пицца', 'Без печи'],
             bakingProgs: [],
             editedItem: {
                 name: '',
@@ -244,6 +245,67 @@
                 const globalIndex = this.gloalItems.indexOf(item)
                 confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
             },
+            validateInputs() {
+                let nameFlag = false;
+                let amountFlag = false;
+                let weightFlag = false;
+                let doughFlag = false;
+                let progFlag = false;
+                let ovenFlag = false;
+
+                if (this.$refs.editName.value.length <= 0) {
+                    this.nameError = true;
+                    nameFlag = false;
+                } else {
+                    this.nameError = false;
+                    nameFlag = true;
+                }
+
+                if (isNaN(this.$refs.editAmount.value) || this.$refs.editAmount.value <= 0) {
+                    this.amountError = true;
+                    amountFlag = false;
+                } else {
+                    this.amountError = false;
+                    amountFlag = true;
+                }
+
+                if (isNaN(this.$refs.editWeight.value) || this.$refs.editWeight.value <= 0) {
+                    this.weightError = true;
+                    weightFlag = false;
+                } else {
+                    this.weightError = false;
+                    weightFlag = true;
+                }
+
+                if (this.$refs.editDough.selectedIndex == -1) {
+                    this.doughError = true;
+                    doughFlag = false;
+                } else {
+                    this.doughError = false;
+                    doughFlag = true;
+                }
+
+                if (this.$refs.editProg.selectedIndex == -1) {
+                    this.progError = true;
+                    progFlag = false;
+                } else {
+                    this.progError = false;
+                    progFlag = true;
+                }
+
+                if (this.$refs.editOven.selectedIndex == -1) {
+                    this.ovenError = true;
+                    ovenFlag = false;
+                } else {
+                    this.progError = false;
+                    ovenFlag = true;
+                }
+
+                if(nameFlag && amountFlag && weightFlag && doughFlag && progFlag && ovenFlag) {
+                    this.save();
+                }
+
+            },
             save() {
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.editedItem)
@@ -252,8 +314,7 @@
                 }
                 this.close()
             },
-            //TODO: validators
-            
+
             close() {
                 this.dialog = false
                 this.$nextTick(() => {
@@ -270,7 +331,6 @@
         destroyed() {
             window.removeEventListener("resize", this.getListStyle);
         },
-        // TODO: make an overlay thing that is used to create and edit recipezzzzzzzzzzzzzzzzzzzzzzzzzzzzz
     }
 </script>
 
