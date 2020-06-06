@@ -36,15 +36,27 @@
             </v-toolbar-items>
             <v-spacer></v-spacer>
 
-
             <v-toolbar-items>
                 <v-btn v-if="!$store.state.loggedIn" text class=" white--text" to="/login">Войти</v-btn>
-                <v-btn v-else text class=" white--text" to="/profile">
-                    <v-avatar v-if="$store.state.loggedIn" class="mr-2" style="margin-top: -3px" color="grey">
-                        <v-img :src="require('./assets/bready.jpg')"></v-img>
-                    </v-avatar>
-                    {{$store.state.username}}
-                </v-btn>
+                <v-menu offset-y v-else transition="slide-y-transition" bottom>
+                    <template v-slot:activator="{ on }">
+                        <v-btn text class=" white--text" v-on="on">
+                            <v-avatar v-if="$store.state.loggedIn" class="mr-2" style="margin-top: -3px" color="grey">
+                                <v-img :src="require('./assets/bready.jpg')"></v-img>
+                            </v-avatar>
+                            {{$store.state.username}}
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item to="/profile">
+                            <v-list-item-title>Профиль</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="logout()">
+                            <v-list-item-title>Выйти</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+
             </v-toolbar-items>
         </v-app-bar>
 
@@ -64,7 +76,12 @@
         data() {
             return {}
         },
-        methods: {},
+        methods: {
+            logout() {
+                this.$store.commit('logout');
+                router.push('/info');
+            }
+        },
 
     };
 </script>

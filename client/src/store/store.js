@@ -10,16 +10,16 @@ export const store = new Vuex.Store({
         loggedIn:true
     },
     mutations: {
-        login (name, type) {
-            this.username = name;
-            this.type = type;
-            this.loggedIn = true;
+        login (state, name, type) {
+            state.username = name;
+            state.type = type;
+            state.loggedIn = true;
         },
 
-        logout() {
-            this.username = '';
-            this.type = '';
-            this.loggedIn = false;
+        logout(state) {
+            state.username = '';
+            state.type = '';
+            state.loggedIn = false;
         }
     }
 })
