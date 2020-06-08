@@ -78,6 +78,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         name: "Inventory",
         data() {
@@ -207,6 +209,15 @@
                     this.nameError = false;
                     setTimeout(() => {this.nameError = true}, 1);
                 }
+            },
+            getInventory() {
+                // todo: get stuff methods
+                const rw = this;
+                axios.get('').then((res) => {
+
+                }).catch((res) => {
+
+                })
             },
             close() {
                 this.dialog = false

@@ -32,26 +32,54 @@ def login():
         return jsonify(result='fail')
 
 
-@app.route('/register', methods=['POST'])
-def register():
-    """
-    Inserts the information about new user unto the database
+@app.route('/getInventory')
+def get_inventory():
+    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='inventory')
+    return jsonify(stuff)
 
-    Returns:
-        Inserts the information about new user unto the database
-    """
-    post_data = request.get_json()
-    print(post_data)
-    today = str(datetime.datetime.now().year) + '-' + str(datetime.datetime.now().month) + '-' + str(
-        datetime.datetime.now().day)
-    email = post_data.get('email')
-    password = post_data.get('password')
-    nickname = post_data.get('nickname')
-    try:
-        User.insert((email, nickname, password, 'null', today, 0, 'sas', False, True, 'gaming', False))
-        return jsonify(result='good')
-    except:
-        return jsonify(result='bad')
+
+@app.route('/addInventory')
+def add_inventory():
+    name = request.args.get('name')
+    amount = request.args.get('amount')
+    img = request.args.get('img')
+    stuff = SQLModel.insert('inventory', ('name', 'amount', 'img'), (name, amount, img))
+    return jsonify(stuff)
+
+
+@app.route('/removeInventory')
+def remove_inventory():
+    inv_id = request.args.get('id')
+    stuff = SQLModel.delete_by_attrs('inventory', 'id', inv_id)
+
+
+@app.route('/getEquipment')
+def get_equipment():
+    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='equipment')
+    return jsonify(stuff)
+
+
+@app.route('/addEquipment')
+def add_equipment():
+    name = request.args.get('name')
+    amount = request.args.get('amount')
+    img = request.args.get('img')
+    stuff = SQLModel.insert('equipment', ('name', 'amount', 'img'), (name, amount, img))
+    return jsonify(stuff)
+
+@app.route('removeEquipment')
+def remove_equipment():
+    eq_id = request.args.get('id')
+    stuff = SQLModel.delete_by_attrs('equipment', 'id', eq_id)
+
+
+@app.route('getEmployees')
+def get_employees():
+    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='employees')
+    return jsonify(stuff)
+
+
+@app.route()
 
 
 @app.route('/channel')
