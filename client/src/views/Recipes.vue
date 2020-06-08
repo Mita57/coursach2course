@@ -249,7 +249,6 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-                console.log(this.editedItem);
                 this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
                 this.searchFieldChanged();
                 this.dialog = true
