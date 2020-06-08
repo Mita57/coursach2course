@@ -9,8 +9,18 @@ export const store = new Vuex.Store({
         type:'admin',
         loggedIn:true
     },
+    actions: {
+        login ({commit}, name, type) {
+            commit('login', name, type);
+        },
+
+        logout({commit}) {
+            commit('logout');
+        }
+    },
+
     mutations: {
-        login (state, name, type) {
+        login(state, user, type) {
             state.username = name;
             state.type = type;
             state.loggedIn = true;

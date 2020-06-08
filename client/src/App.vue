@@ -78,10 +78,10 @@
         },
         methods: {
             logout() {
-                this.$store.commit('logout');
+                this.$store.dispatch('logout');
                 router.push('/info');
             }
-        },
+        }
 
     };
 </script>
