@@ -3,7 +3,6 @@ import psycopg2
 
 
 class SQLModel:
-
     @classmethod
     def normalize_cols(cls, cols):
         new_cols = ''
@@ -12,18 +11,18 @@ class SQLModel:
         new_cols = new_cols[0:-2]
         return new_cols
 
-    @staticmethod
-    def insert(table, cols, values):
+    @classmethod
+    def insert(cls, table, cols, values):
         """
             Inserts the data into the database
             args:
                 values: the values to be inserted into the database
         """
+        cols = cls.normalize_cols(cols)
         with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 sql_insert_query = """INSERT INTO {}({}) VALUES {} """.format(table, cols, values)
-                print(sql_insert_query)
                 cursor.execute(sql_insert_query)
                 conn.commit()
 
@@ -34,17 +33,23 @@ class SQLModel:
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 if group_by is None and order_by is None:
-                    sql_select_query = """SELECT {} FROM {} WHERE {}='{}' """.format(new_cols, table, attr_cols, attr_values)
+                    sql_select_query = """SELECT {} FROM {} WHERE {}='{}' """.format(new_cols, table, attr_cols,
+                                                                                     attr_values)
                     cursor.execute(sql_select_query)
                     value = cursor.fetchall()
                     return value
                 if group_by is not None and order_by is None:
-                    sql_select_query = """SELECT {} FROM {} WHERE {}='{}' GROUP BY {}""".format(new_cols, table, attr_cols, attr_values, group_by)
+                    sql_select_query = """SELECT {} FROM {} WHERE {}='{}' GROUP BY {}""".format(new_cols, table,
+                                                                                                attr_cols, attr_values,
+                                                                                                group_by)
                     cursor.execute(sql_select_query)
                     value = cursor.fetchall()
                     return value
                 if group_by is None and order_by is not None:
-                    sql_select_query = ("""SELECT {} FROM {} WHERE {} = '{}' ORDER BY {}""").format(new_cols, table, attr_cols, attr_values, order_by)
+                    sql_select_query = ("""SELECT {} FROM {} WHERE {} = '{}' ORDER BY {}""").format(new_cols, table,
+                                                                                                    attr_cols,
+                                                                                                    attr_values,
+                                                                                                    order_by)
                     cursor.execute(sql_select_query)
                     value = cursor.fetchall()
                     return value
@@ -54,12 +59,15 @@ class SQLModel:
                     cursor.execute(sql_select_query)
                     value = cursor.fectchall()
                     return value
+
     @classmethod
     def update_by_attrs(cls, table, columns, values, attr_cols, attr_values):
+        columns = cls.normalize_cols(columns)
         with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
-                sql_update_query = """UPDATE {} SET ({})={} WHERE {}={}""".format(table, columns, values, attr_cols, attr_values)
+                sql_update_query = """UPDATE {} SET ({})={} WHERE {}={}""".format(table, columns, values, attr_cols,
+                                                                                  attr_values)
                 print(sql_update_query)
                 cursor.execute(sql_update_query)
                 conn.commit()
@@ -70,7 +78,6 @@ class SQLModel:
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 sql_delete_query = """DELETE FROM {} where {}='{}'""".format(table, attr_cols, attr_values)
-                print(sql_delete_query)
                 cursor.execute(sql_delete_query)
                 conn.commit()
 

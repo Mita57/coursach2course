@@ -34,7 +34,7 @@ def login():
 
 @app.route('/getInventory')
 def get_inventory():
-    stuff = SQLModel.get_by_attrs(cols=('name', 'amount'), attr_cols='1', attr_values='1', table='inventory')
+    stuff = SQLModel.get_by_attrs(cols=('name', 'amount', 'id'), attr_cols='1', attr_values='1', table='inventory')
     return jsonify(stuff)
 
 
@@ -43,7 +43,17 @@ def add_inventory():
     name = request.args.get('name')
     amount = request.args.get('amount')
     img = request.args.get('img')
-    stuff = SQLModel.insert('inventory', ('name', 'amount', 'img'), (name, amount, img))
+    stuff = SQLModel.insert('inventory', ('name', 'amount'), (name, amount))
+    return jsonify(stuff)
+
+
+@app.route('/editInventory')
+def edit_inventory():
+    inv_id = request.args.get('id')
+    name = request.args.get('name')
+    amount = request.args.get('amount')
+    img = request.args.get('img')
+    stuff = SQLModel.update_by_attrs('inventory', ('name', 'amount'), (name, amount), 'id', inv_id)
     return jsonify(stuff)
 
 

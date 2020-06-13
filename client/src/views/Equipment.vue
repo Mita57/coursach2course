@@ -96,76 +96,7 @@
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                globalItems: [
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                ],
+                globalItems: [],
                 items: [],
                 editedIndex: -1,
                 editedItem: {
@@ -179,14 +110,6 @@
                     image: '',
                 },
                 date: new Date().toISOString().substr(0, 10),
-                arrayEvents: [`${new Date().getFullYear()}-12-31`,
-                    `${new Date().getFullYear()}-02-14`,
-                    `${new Date().getFullYear()}-02-23`,
-                    `${new Date().getFullYear()}-03-08`,
-                    `${new Date().getFullYear()}-05-09`,
-                    `${new Date().getFullYear()}-09-01`,
-                    `${new Date().getFullYear()}-04-04`, // easter
-                ]
             }
         },
         methods: {

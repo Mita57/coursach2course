@@ -68,15 +68,6 @@
                 </template>
             </v-data-table>
         </div>
-
-        <div id="buttons">
-            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
-                   @click="cancelClick()">Отмена
-            </v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveInventory()">
-                Сохранить
-            </v-btn>
-        </div>
     </div>
 </template>
 
@@ -106,6 +97,7 @@
                     name: '',
                     amount: 1,
                     image: '',
+                    id: 0,
                 },
                 defaultItem: {
                     name: '',
@@ -118,7 +110,6 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-
                 this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
                 this.searchFieldChanged();
                 this.dialog = true
@@ -126,16 +117,39 @@
 
             deleteItem(item) {
                 const index = this.items.indexOf(item)
-                const globalIndex = this.gloalItems.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
+                const globalIndex = this.globalItems.indexOf(item)
+                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) &&
+                this.globalItems.splice(globalIndex, 1) &&
+                axios.get('http://127.0.0.1:5000/removeInventory?id=' + globalIndex).catch((err) => {
+                    console.log(err);
+                })
             },
             save() {
                 if (this.$refs.editName.value != '' && !this.amountError) {
                     this.nameError = false;
                     if (this.editedIndex > -1) {
-                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                        Object.assign(this.items[this.editedIndex], this.editedItem);
+                        let self = this;
+                        axios.get('http://127.0.0.1:5000/editInventory', {
+                            params: {
+                                id: self.editedItem.id,
+                                name: self.editedItem.name,
+                                amount: self.editedItem.amount
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
                     } else {
                         this.items.push(this.editedItem)
+                        let self = this;
+                        axios.get('http://127.0.0.1:5000/addInventory', {
+                            params: {
+                                name: self.editedItem.name,
+                                amount: self.editedItem.amount
+                            }
+                        }).then().catch((err) => {
+                            console.log(err);
+                        })
                     }
                     this.close()
                 } else {
@@ -152,12 +166,12 @@
                     for (let i = 0; i < res.data.length; i++) {
                         let elem = {
                             name: res.data[i][0],
-                            amount: res.data[i][1]
+                            amount: res.data[i][1],
+                            id: res.data[i][2]
                         };
                         resp.push(elem);
                     }
                     rw.globalItems = resp;
-                    console.log(rw.globalItems);
                     rw.syncStuff();
                 }).catch((res) => {
                     console.log(res);
@@ -169,9 +183,6 @@
                     this.editedItem = Object.assign({}, this.defaultItem)
                     this.editedIndex = -1
                 })
-            },
-            saveInventory() {
-                throw 'not implemented';
             },
             validateAmount() {
                 if (isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
@@ -187,11 +198,11 @@
             },
             getTableHeight() {
                 if (window.innerHeight <= 600) {
-                    this.tableHeight = window.innerHeight * 0.65;
-                } else if (window.innerHeight < 800) {
-                    this.tableHeight = window.innerHeight * 0.7;
-                } else {
                     this.tableHeight = window.innerHeight * 0.75;
+                } else if (window.innerHeight < 800) {
+                    this.tableHeight = window.innerHeight * 0.80;
+                } else {
+                    this.tableHeight = window.innerHeight * 0.85;
                 }
             },
             cancelClick() {
@@ -230,14 +241,4 @@
         height: 10%;
     }
 
-    #buttons {
-        display: flex;
-        width: 80%;
-        margin: auto;
-        justify-content: space-around;
-    }
-
-    .bts {
-        width: 150px;
-    }
 </style>
