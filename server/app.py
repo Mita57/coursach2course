@@ -34,7 +34,7 @@ def login():
 
 @app.route('/getInventory')
 def get_inventory():
-    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='inventory')
+    stuff = SQLModel.get_by_attrs(cols=('name', 'amount'), attr_cols='1', attr_values='1', table='inventory')
     return jsonify(stuff)
 
 
@@ -67,19 +67,16 @@ def add_equipment():
     stuff = SQLModel.insert('equipment', ('name', 'amount', 'img'), (name, amount, img))
     return jsonify(stuff)
 
-@app.route('removeEquipment')
+@app.route('/removeEquipment')
 def remove_equipment():
     eq_id = request.args.get('id')
     stuff = SQLModel.delete_by_attrs('equipment', 'id', eq_id)
 
 
-@app.route('getEmployees')
+@app.route('/getEmployees')
 def get_employees():
     stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='employees')
     return jsonify(stuff)
-
-
-@app.route()
 
 
 @app.route('/channel')
@@ -91,7 +88,7 @@ def get_channel():
     """
     nick = request.args.get('nickname')
     print(nick)
-    stuff = User.get_by_attrs(cols=('nickname', 'subs', 'description', 'curr_hub'), attr_cols='nickname',
+    stuff = SQLModel.get_by_attrs(cols=('nickname', 'subs', 'description', 'curr_hub'), attr_cols='nickname',
                               attr_values=nick)
     print(stuff)
     return jsonify(stuff)

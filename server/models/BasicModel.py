@@ -19,7 +19,7 @@ class SQLModel:
             args:
                 values: the values to be inserted into the database
         """
-        with closing(psycopg2.connect(database='crm', user='postgres', password='MOORMOOR',
+        with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 sql_insert_query = """INSERT INTO {}({}) VALUES {} """.format(table, cols, values)
@@ -30,7 +30,7 @@ class SQLModel:
     @classmethod
     def get_by_attrs(cls, cols, table, attr_cols, attr_values, group_by=None, order_by=None):
         new_cols = cls.normalize_cols(cols)
-        with closing(psycopg2.connect(database='crm', user='postgres', password='MOORMOOR',
+        with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 if group_by is None and order_by is None:
@@ -56,7 +56,7 @@ class SQLModel:
                     return value
     @classmethod
     def update_by_attrs(cls, table, columns, values, attr_cols, attr_values):
-        with closing(psycopg2.connect(database='crm', user='postgres', password='MOORMOOR',
+        with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 sql_update_query = """UPDATE {} SET ({})={} WHERE {}={}""".format(table, columns, values, attr_cols, attr_values)
@@ -66,7 +66,7 @@ class SQLModel:
 
     @staticmethod
     def delete_by_attrs(table, attr_cols, attr_values):
-        with closing(psycopg2.connect(database='crm', user='postgres', password='MOORMOOR',
+        with closing(psycopg2.connect(database='bakery', user='postgres', password='MOORMOOR',
                                       host='127.0.0.1', port='5432')) as conn:
             with conn.cursor() as cursor:
                 sql_delete_query = """DELETE FROM {} where {}='{}'""".format(table, attr_cols, attr_values)

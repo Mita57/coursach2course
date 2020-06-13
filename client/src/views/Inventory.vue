@@ -28,12 +28,15 @@
                                     <v-container>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
+                                                <v-text-field dense v-model="editedItem.name" ref="editName"
+                                                              :error="nameError" label="Название"/>
                                             </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-col>
-                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount" :error="amountError"  @input="validateAmount()" :label="changeAmountLabel"/>
+                                                <v-text-field dense v-model="editedItem.amount" ref="editAmount"
+                                                              :error="amountError" @input="validateAmount()"
+                                                              :label="changeAmountLabel"/>
                                             </v-col>
                                         </v-row>
                                         <v-file-input dense accept="image/png, image/jpeg, image/bmp"
@@ -96,76 +99,7 @@
                     {text: 'Количество', align: 'start', value: 'amount'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                globalItems: [
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                ],
+                globalItems: [],
                 items: [],
                 editedIndex: -1,
                 editedItem: {
@@ -204,19 +138,29 @@
                         this.items.push(this.editedItem)
                     }
                     this.close()
-                }
-                else {
+                } else {
                     this.nameError = false;
-                    setTimeout(() => {this.nameError = true}, 1);
+                    setTimeout(() => {
+                        this.nameError = true
+                    }, 1);
                 }
             },
             getInventory() {
-                // todo: get stuff methods
                 const rw = this;
-                axios.get('').then((res) => {
-
+                axios.get('http://127.0.0.1:5000/getInventory').then((res) => {
+                    let resp = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let elem = {
+                            name: res.data[i][0],
+                            amount: res.data[i][1]
+                        };
+                        resp.push(elem);
+                    }
+                    rw.globalItems = resp;
+                    console.log(rw.globalItems);
+                    rw.syncStuff();
                 }).catch((res) => {
-
+                    console.log(res);
                 })
             },
             close() {
@@ -230,12 +174,13 @@
                 throw 'not implemented';
             },
             validateAmount() {
-                if(isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
+                if (isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
                     this.amountError = false;
-                    setTimeout(() => {this.amountError = true;}, 1);
+                    setTimeout(() => {
+                        this.amountError = true;
+                    }, 1);
                     this.changeAmountLabel = 'Количество должно быть числом больше 0';
-                }
-                else {
+                } else {
                     this.amountError = false;
                     this.changeAmountLabel = 'Количество';
                 }
@@ -258,6 +203,9 @@
                 this.items = (this.globalItems.filter(obj => {
                     return obj.name.includes(this.search);
                 }))
+            },
+            syncStuff() {
+                this.items = this.globalItems;
             }
         },
         created() {
@@ -269,7 +217,7 @@
             window.removeEventListener("resize", this.getTableHeight);
         },
         mounted() {
-            this.items = this.globalItems;
+            this.getInventory();
         }
     }
 </script>
