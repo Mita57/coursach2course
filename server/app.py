@@ -16,6 +16,29 @@ def login():
     Returns: JSON with auth result info
     """
     data = request.get_json()
+    email = data.get('email')
+    password = data.get('pwrd')
+    user = SQLModel.get_by_attrs(('email', 'pwrd'), 'users', 'email', email)
+    try:
+        user_pw = user[0][1]
+        user_nick = user[0][0]
+        if password == user_pw:
+            stuff = SQLModel.get_by_attrs(('login', 'pwrdHash', 'type', 'name'), 'users', 'login', login)
+            return jsonify(stuff)
+        else:
+            return 'fail'
+    except:
+        return 'fail'
+
+
+@app.route('/loginForFuture', methods=['POST'])
+def logindsqw():
+    """
+    Gets the data from the login form and authorizes the input
+
+    Returns: JSON with auth result info
+    """
+    data = request.get_json()
     email = data.get('login')
     password = data.get('pwrd')
     user = SQLModel.get_by_attrs(('login', 'pwrdHash', 'type', 'name'), 'users', 'login', login)
@@ -98,12 +121,6 @@ def edit_equipment():
     return 'Ok'
 
 
-@app.route('/getEmployees')
-def get_employees():
-    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='employees')
-    return jsonify(stuff)
-
-
 @app.route('/getProgs')
 def get_progs():
     oven_id = request.args.get('id')
@@ -135,10 +152,48 @@ def edit_prog():
     dryness = request.args.get('dryness')
     fan = request.args.get('fan')
     SQLModel.update_by_attrs('baking_progs', ('name', 'temp', 'time', 'steam', 'dry', 'fan_speed'),
-                    (name, temp, time, steam, dryness, fan), 'id', id)
+                             (name, temp, time, steam, dryness, fan), 'id', id)
+    return 'ok'
+
 
 @app.route('/removeProg')
 def delete_prog():
     bp_id = request.args.get('id')
     SQLModel.delete_by_attrs('baking_progs', 'id', bp_id)
+    return 'ok'
+
+
+@app.route('/getEmployees')
+def get_employees():
+    stuff = SQLModel.get_by_attrs(cols=('email', 'type', 'name', 'id'), attr_cols='1', attr_values='1', table='users')
+    return jsonify(stuff)
+
+
+@app.route('/addEmployee')
+def add_employee():
+    name = request.args.get('name')
+    email = request.args.get('email')
+    type = request.args.get('type')
+    pwrd = request.args.get('pwrd')
+    SQLModel.insert('users', ('name', 'email', 'type', 'pwrd'),
+                    (name, email, type, pwrd))
+    return 'ok'
+
+
+@app.route('/editEmployee')
+def edit_employee():
+    name = request.args.get('name')
+    email = request.args.get('email')
+    type = request.args.get('type')
+    pwrd = request.args.get('pwrd')
+    emp_id = request.args.get('id')
+    SQLModel.update_by_attrs('users', ('name', 'email', 'type', 'pwrd'),
+                             (name, email, type, pwrd), 'id', emp_id)
+    return 'ok'
+
+
+@app.route('/removeEmployee')
+def delete_employee():
+    bp_id = request.args.get('id')
+    SQLModel.delete_by_attrs('users', 'id', bp_id)
     return 'ok'

@@ -21,26 +21,26 @@
                         <v-container>
                             <v-row>
                                 <v-col>
-                                    <v-text-field dense v-model="editedItem.name" :error="nameError" ref="editName"
+                                    <v-text-field dense v-model="editedItem.name" :error="nameError"
                                                   label="Имя"/>
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col>
-                                    <v-text-field dense v-model="editedItem.email" :error="emailError" ref="editEmail"
+                                    <v-text-field dense v-model="editedItem.email" :error="emailError"
                                                   type="email" label="Email"/>
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col>
-                                    <v-text-field dense v-model="editedItem.pwrd" :error="pwrdError" ref="editPwrd"
+                                    <v-text-field dense v-model="editedItem.pwrd" :error="pwrdError"
                                                   type="password" label="Пароль (не менее четырех символов)"/>
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col>
                                     <v-select dense :items="userTypes" v-model="editedItem.type" :error="typeError"
-                                              ref="editType" label="Тип учетной записи" solo/>
+                                              label="Тип учетной записи" solo/>
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -51,6 +51,7 @@
                         </v-container>
                     </v-card-text>
                     <v-card-actions>
+                        <v-btn color="danger" v-if="editedIndex != -1" text @click="deleteItem()">Удалить</v-btn>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" text @click="close">Отменить</v-btn>
                         <v-btn color="primary" text @click="validateInputs()">Сохранить</v-btn>
@@ -70,8 +71,8 @@
                             <v-img :src="item.avatar"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                            <v-list-item-title v-html="item.name"></v-list-item-title>
-                            <v-list-item-subtitle v-html="item.info"></v-list-item-subtitle>
+                            <v-list-item-title>{{item.name}}</v-list-item-title>
+                            <v-list-item-subtitle>{{item.type}} , {{item.email}}</v-list-item-subtitle>
                         </v-list-item-content>
                     </v-list-item>
                     <v-divider/>
@@ -82,136 +83,12 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "Employees",
         data: () => ({
-            globalItems: [
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    name: 'Пенопласт Егор',
-                    info: "Пекарь, asdasdassd@dfsads.com",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    name: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    info: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    name: 'Oui oui',
-                    info: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    name: 'Birthday gift',
-                    info: "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    name: 'Recipe to try',
-                    info: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    name: 'Пенопласт Егор',
-                    info: "Пекарь, asdasdassd@dfsads.com",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    name: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    info: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    name: 'Oui oui',
-                    info: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    name: 'Birthday gift',
-                    info: "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    name: 'Recipe to try',
-                    info: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    name: 'Пенопласт Егор',
-                    info: "Пекарь, asdasdassd@dfsads.com",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    name: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    info: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    name: 'Oui oui',
-                    info: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    name: 'Birthday gift',
-                    info: "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    name: 'Recipe to try',
-                    info: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    name: 'Пенопласт Егор',
-                    info: "Пекарь, asdasdassd@dfsads.com",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    name: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    info: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    name: 'Oui oui',
-                    info: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    name: 'Birthday gift',
-                    info: "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    name: 'Recipe to try',
-                    info: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-                    name: 'Пенопласт Егор',
-                    info: "Пекарь, asdasdassd@dfsads.com",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-                    name: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-                    info: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                    name: 'Oui oui',
-                    info: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-                    name: 'Birthday gift',
-                    info: "<span class='text--primary'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
-                },
-                {
-                    avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-                    name: 'Recipe to try',
-                    info: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-                },
-            ],
+            globalItems: [],
             items: [],
             userTypes: ['Администратор', 'Кассир', 'Пекарь'],
             dialog: false,
@@ -219,6 +96,7 @@
             emailError: false,
             pwrdError: false,
             typeError: false,
+            search: '',
             listStyle: '',
             editedIndex: -1,
             editedItem: {
@@ -226,17 +104,17 @@
                 email: '',
                 pwrd: '',
                 type: '',
-                img: new Blob()
+                id: 0
             },
             defaultItem: {
                 name: '',
                 email: '',
                 pwrd: '',
                 type: '',
-                img: new Blob()
             },
         }),
         methods: {
+            //todo: images
             getListStyle() {
                 if (window.innerHeight <= 600) {
                     this.listStyle = 'height: ' + window.innerHeight * 0.80 + 'px';
@@ -257,19 +135,27 @@
 
             }
             ,
-            deleteItem(item) {
-                const index = this.items.indexOf(item)
-                const globalIndex = this.gloalItems.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
+            deleteItem() {
+                const rw = this;
+                const globalIndex = this.globalItems.indexOf(this.items[this.editedIndex]);
+                const id = this.globalItems[globalIndex].id;
+                confirm('Удалить ' + this.globalItems[globalIndex].name + '?') &&
+                this.globalItems.splice(globalIndex, 1) &&
+                axios.get('http://127.0.0.1:5000/removeEmployee?id=' + id).then(() => {
+                    rw.searchFieldChanged();
+                }).catch((err) => {
+                    console.log(err);
+                })
+                this.dialog = false;
             },
+
             validateInputs() {
                 let nameFlag = false;
                 let emailFlag = false;
                 let pwrdFlag = false;
                 let typeFlag = false;
-                console.log(this.$refs.editType);
 
-                if (this.$refs.editName.value.length > 0) {
+                if (this.editedItem.name.length > 2) {
                     nameFlag = true;
                     this.nameError = false;
                 } else {
@@ -280,7 +166,7 @@
                     }, 1)
                 }
 
-                let email = this.$refs.editEmail.value;
+                let email = this.editedItem.email;
                 const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
                 if (re.test(email)) {
@@ -294,7 +180,7 @@
                     }, 1)
                 }
 
-                if (this.$refs.editPwrd.value.length >= 4) {
+                if (this.editedItem.pwrd >= 4) {
                     pwrdFlag = true;
                     this.pwrdError = false;
                 } else {
@@ -306,7 +192,7 @@
                 }
 
 
-                if (this.$refs.editType.selectedItems.length == 1) {
+                if (this.editedItem.type != '') {
                     typeFlag = true;
                     this.typeError = false;
                 } else {
@@ -323,11 +209,58 @@
 
 
             },
+            getEmployees() {
+                const rw = this;
+                axios.get('http://127.0.0.1:5000/getEmployees').then((res) => {
+                    let resp = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let elem = {
+                            email: res.data[i][0],
+                            type: res.data[i][1],
+                            name: res.data[i][2],
+                            id: res.data[i][3]
+                        };
+                        resp.push(elem);
+                    }
+                    rw.globalItems = resp;
+                    rw.syncStuff();
+                }).catch((res) => {
+                    console.log(res);
+                })
+            },
+            syncStuff() {
+                this.items = this.globalItems
+            },
             save() {
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.editedItem)
+
+                    let self = this;
+                    axios.get('http://127.0.0.1:5000/editEmployee', {
+                        params: {
+                            email: self.editedItem.email,
+                            name: self.editedItem.name,
+                            pwrd: self.editedItem.pwrd,
+                            type: self.editedItem.type,
+                            id: self.editedItem.id,
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
                 } else {
                     this.items.push(this.editedItem)
+                    let self = this;
+
+                    axios.get('http://127.0.0.1:5000/addEmployee', {
+                        params: {
+                            email: self.editedItem.email,
+                            name: self.editedItem.name,
+                            pwrd: self.editedItem.pwrd,
+                            type: self.editedItem.type,
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
                 }
                 this.close()
             },
@@ -348,7 +281,9 @@
         destroyed() {
             window.removeEventListener("resize", this.getListStyle);
         },
-        // TODO: make an overlay thing that is used to create and edit recipezzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+        mounted() {
+            this.getEmployees();
+        }
     }
 </script>
 

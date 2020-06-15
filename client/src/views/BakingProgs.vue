@@ -39,7 +39,7 @@
                                     <v-container>
                                         <v-row>
                                             <v-text-field dense v-model="editedItem.name"
-                                                          :error="nameError" label="Название" />
+                                                          :error="nameError" label="Название"/>
                                         </v-row>
                                         <v-row>
                                             <v-text-field dense v-model="editedItem.temp" :error="tempError"
@@ -128,8 +128,8 @@
                     name: '',
                     temp: 1,
                     time: 1,
-                    steam: '',
-                    dryness: '',
+                    steam: 0,
+                    dryness: 0,
                     fan: '',
                     isP: false
                 },
@@ -137,9 +137,9 @@
                     name: '',
                     temp: 1,
                     time: 1,
-                    steam: '',
-                    dryness: '',
-                    fan: '',
+                    steam: 0,
+                    dryness: 0,
+                    fan: 0,
                     isP: false
                 },
                 date: new Date().toISOString().substr(0, 10),
@@ -164,34 +164,27 @@
 
             validatePercent(type) {
                 if (type == "steam") {
-                    if (this.editedItem.steam != "") {
-                        if (parseInt(this.editedItem.steam) < 0 || parseInt(this.editedItem.steam) > 100) {
-                            this.steamError = false;
-                            setTimeout(() => {
-                                this.steamError = true
-                            }, 1);
-                        } else {
-                            this.steamError = false;
-                        }
-
+                    if (parseInt(this.editedItem.steam) < 0 || parseInt(this.editedItem.steam) > 100 || this.editedItem.steam == '') {
+                        this.steamError = false;
+                        setTimeout(() => {
+                            this.steamError = true
+                        }, 1);
                     } else {
                         this.steamError = false;
                     }
-                } else {
-                    if (this.editedItem.dryness != "") {
-                        if (parseInt(this.editedItem.dryness) < 0 || parseInt(this.editedItem.dryness) > 100) {
-                            this.drynessError = false;
-                            setTimeout(() => {
-                                this.drynessError = true
-                            }, 1);
-                        } else {
-                            this.drynessError = false;
-                        }
 
+                } else {
+                    if (parseInt(this.editedItem.dryness) < 0 || parseInt(this.editedItem.dryness) > 100 || this.editedItem.dryness == '') {
+                        this.drynessError = false;
+                        setTimeout(() => {
+                            this.drynessError = true
+                        }, 1);
                     } else {
                         this.drynessError = false;
                     }
+
                 }
+
             },
             deleteItem(item) {
                 const globalIndex = this.globalItems.indexOf(item)
@@ -210,13 +203,13 @@
                     this.nameError = false;
                     this.tempError = false;
                     this.timeError = false;
-                    
+
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem);
 
                         let self = this;
                         let finalFan = this.editedItem.fan;
-                        if(this.editedItem.isP) {
+                        if (this.editedItem.isP) {
                             finalFan += "p";
                         }
 
@@ -228,7 +221,7 @@
                                 time: self.editedItem.time,
                                 steam: self.editedItem.steam,
                                 dryness: self.editedItem.dryness,
-                                fan:finalFan
+                                fan: finalFan
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -238,7 +231,7 @@
 
                         let self = this;
                         let finalFan = this.editedItem.fan;
-                        if(this.editedItem.isP) {
+                        if (this.editedItem.isP) {
                             finalFan += "p";
                         }
 
@@ -250,7 +243,7 @@
                                 time: self.editedItem.time,
                                 steam: self.editedItem.steam,
                                 dryness: self.editedItem.dryness,
-                                fan:finalFan
+                                fan: finalFan
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -263,8 +256,7 @@
                         setTimeout(() => {
                             this.nameError = true
                         }, 1);
-                    }
-                    else {
+                    } else {
                         this.nameError = false;
                     }
 
@@ -273,8 +265,7 @@
                         setTimeout(() => {
                             this.timeError = true
                         }, 1);
-                    }
-                    else {
+                    } else {
                         this.timeError = false;
                     }
 
@@ -283,8 +274,7 @@
                         setTimeout(() => {
                             this.tempError = true
                         }, 1);
-                    }
-                    else {
+                    } else {
                         this.tempError = false;
                     }
                 }
@@ -342,11 +332,10 @@
                         let isP = false;
                         let respFan = res.data[i][5];
 
-                        if(respFan.includes('p')) {
+                        if (respFan.includes('p')) {
                             fan = respFan.substring(0, respFan.length - 1);
                             isP = true;
-                        }
-                        else {
+                        } else {
                             fan = respFan;
                         }
                         elem.isP = isP;
