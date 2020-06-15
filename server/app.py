@@ -53,34 +53,49 @@ def edit_inventory():
     name = request.args.get('name')
     amount = request.args.get('amount')
     img = request.args.get('img')
-    stuff = SQLModel.update_by_attrs('inventory', ('name', 'amount'), (name, amount), 'id', inv_id)
-    return jsonify(stuff)
+    SQLModel.update_by_attrs('inventory', ('name', 'amount'), (name, amount), 'id', inv_id)
+    return 'Ok'
 
 
 @app.route('/removeInventory')
 def remove_inventory():
     inv_id = request.args.get('id')
-    stuff = SQLModel.delete_by_attrs('inventory', 'id', inv_id)
+    SQLModel.delete_by_attrs('inventory', 'id', inv_id)
+    return 'Ok'
 
 
 @app.route('/getEquipment')
 def get_equipment():
-    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='1', attr_values='1', table='equipment')
+    stuff = SQLModel.get_by_attrs(cols=('id', 'name', 'sheets_amount', 'type'), attr_cols='1', attr_values='1',
+                                  table='equipment')
     return jsonify(stuff)
 
 
 @app.route('/addEquipment')
 def add_equipment():
     name = request.args.get('name')
-    amount = request.args.get('amount')
-    img = request.args.get('img')
-    stuff = SQLModel.insert('equipment', ('name', 'amount', 'img'), (name, amount, img))
+    amount = request.args.get('sheetsAmount')
+    type = request.args.get('type')
+    stuff = SQLModel.insert('equipment', ('name', 'sheets_amount', 'type'), (name, amount, type))
     return jsonify(stuff)
+
 
 @app.route('/removeEquipment')
 def remove_equipment():
     eq_id = request.args.get('id')
-    stuff = SQLModel.delete_by_attrs('equipment', 'id', eq_id)
+    SQLModel.delete_by_attrs('equipment', 'id', eq_id)
+    return ('Ok')
+
+
+@app.route('/editEquipment')
+def edit_equipment():
+    eq_id = request.args.get('id')
+    name = request.args.get('name')
+    type = request.args.get('type')
+    amount = request.args.get('amount')
+    img = request.args.get('img')
+    SQLModel.update_by_attrs('inventory', ('name', 'sheets_amount', 'type'), (name, amount, type), 'id', eq_id)
+    return 'Ok'
 
 
 @app.route('/getEmployees')
@@ -89,20 +104,41 @@ def get_employees():
     return jsonify(stuff)
 
 
-@app.route('/channel')
-def get_channel():
-    """
-    gets the channel info from the database and returns info about it
-    Returns:
-        JSON with channel info
-    """
-    nick = request.args.get('nickname')
-    print(nick)
-    stuff = SQLModel.get_by_attrs(cols=('nickname', 'subs', 'description', 'curr_hub'), attr_cols='nickname',
-                              attr_values=nick)
-    print(stuff)
+@app.route('/getProgs')
+def get_progs():
+    oven_id = request.args.get('id')
+    stuff = SQLModel.get_by_attrs(cols=('*'), attr_cols='oven_id', attr_values=oven_id, table='baking_progs')
     return jsonify(stuff)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/addProg')
+def add_prog():
+    name = request.args.get('name')
+    oven_id = request.args.get('ovenId')
+    temp = request.args.get('temp')
+    time = request.args.get('time')
+    steam = request.args.get('steam')
+    dryness = request.args.get('dryness')
+    fan = request.args.get('fan')
+    SQLModel.insert('baking_progs', ('name', 'temp', 'time', 'steam', 'dry', 'fan_speed', 'oven_id'),
+                    (name, temp, time, steam, dryness, fan, oven_id))
+    return 'ok'
+
+
+@app.route('/editProg')
+def edit_prog():
+    name = request.args.get('name')
+    id = request.args.get('id')
+    temp = request.args.get('temp')
+    time = request.args.get('time')
+    steam = request.args.get('steam')
+    dryness = request.args.get('dryness')
+    fan = request.args.get('fan')
+    SQLModel.update_by_attrs('baking_progs', ('name', 'temp', 'time', 'steam', 'dry', 'fan_speed'),
+                    (name, temp, time, steam, dryness, fan), 'id', id)
+
+@app.route('/removeProg')
+def delete_prog():
+    bp_id = request.args.get('id')
+    SQLModel.delete_by_attrs('baking_progs', 'id', bp_id)
+    return 'ok'

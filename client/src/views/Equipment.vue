@@ -23,24 +23,29 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                    <span class="headline">Предмет</span>
+                                    <span class="headline">Печь</span>
                                 </v-card-title>
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-text-field dense v-model="editedItem.name" :error="nameError" ref="editName" label="Название"/>
+                                            <v-text-field dense v-model="editedItem.name" :error="nameError"
+                                                          ref="editName" label="Название"/>
                                         </v-row>
                                         <v-row>
-
-                                            <v-text-field dense v-model="editedItem.amount" ref="editAmount"
-                                                          :error="amountError" @input="validateAmount()"
-                                                          :label="changeAmountLabel"></v-text-field>
+                                            <v-text-field dense v-model="editedItem.sheetsAmount" ref="editSheetsAmount"
+                                                          :error="sheetsAmountError" @input="validateSheetsAmount()" type="number"
+                                                          :label="sheetsAmountLabel"></v-text-field>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col>
+                                                <v-select dense :items="ovenTypes" v-model="editedItem.type" :error="typeError"
+                                                          ref="editType" label="Тип печи" solo/>
+                                            </v-col>
                                         </v-row>
                                         <v-row>
                                             <v-file-input dense accept="image/png, image/jpeg, image/bmp"
                                                           placeholder="Добавьте изображение" prepend-icon="mdi-camera"
                                                           label="Изображение"/>
-                                        </v-row>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -68,18 +73,12 @@
             </v-data-table>
         </div>
 
-        <div id="buttons">
-            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
-                   @click="cancelClick()">Отмена
-            </v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveInventory()">
-                Сохранить
-            </v-btn>
-        </div>
     </div>
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "Equipment",
         data() {
@@ -87,13 +86,17 @@
                 search: '',
                 dialog: false,
                 nameError: false,
-                amountError: false,
-                changeAmountLabel:'Количество',
+                typeError:false,
+                ovenTypes:['Подовая', 'Конвекционная', 'Пицца'],
+                sheetsAmountError: false,
+                sheetsAmountLabel: 'Количество противень',
+
                 tableHeight: 0,
                 headers: [
                     {text: '', align: 'start', value: 'image'}, //img
                     {text: 'Название', align: 'start', value: 'name'},
-                    {text: 'Количество', align: 'start', value: 'amount'},
+                    {text: 'Количество противень', align: 'start', value: 'sheetsAmount'},
+                    {text: 'Тип', align: 'start', value: 'type'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
                 globalItems: [],
@@ -101,56 +104,100 @@
                 editedIndex: -1,
                 editedItem: {
                     name: '',
-                    amount: 1,
+                    sheetsAmount: 1,
                     image: '',
+                    type: ''
                 },
                 defaultItem: {
                     name: '',
-                    amount: 1,
+                    sheetsAmount: 1,
                     image: '',
+                    type: ''
                 },
-                date: new Date().toISOString().substr(0, 10),
             }
         },
         methods: {
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item)
                 this.editedItem = Object.assign({}, item)
-
                 this.globalItems[this.globalItems.indexOf(item)] = Object.assign({}, item);
                 this.searchFieldChanged();
                 this.dialog = true
             },
 
             deleteItem(item) {
-                const index = this.items.indexOf(item)
-                const globalIndex = this.gloalItems.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
+                const rw = this;
+                const globalIndex = this.globalItems.indexOf(item);
+                const id = this.globalItems[globalIndex].id;
+                confirm('Удалить ' + this.globalItems[globalIndex].name + '?') &&
+                this.globalItems.splice(globalIndex, 1) &&
+                axios.get('http://127.0.0.1:5000/removeEquipment?id=' + id).then(() => {
+                    rw.searchFieldChanged();
+                }).catch((err) => {
+                    console.log(err);
+                })
             },
             save() {
-                if (this.$refs.editName.value != '' && !this.amountError) {
+                if (this.$refs.editName.value != '' && !this.sheetsAmountError && !this.editedItem.type == '') {
                     this.nameError = false;
                     if (this.editedIndex > -1) {
-                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                        Object.assign(this.items[this.editedIndex], this.editedItem);
+                        let self = this;
+                        axios.get('http://127.0.0.1:5000/editEquipment', {
+                            params: {
+                                id: self.editedItem.id,
+                                name: self.editedItem.name,
+                                sheetsAmount: self.editedItem.sheetsAmount,
+                                type: self.editedItem.type
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
                     } else {
                         this.items.push(this.editedItem)
+                        let self = this;
+                        axios.get('http://127.0.0.1:5000/addEquipment', {
+                            params: {
+                                name: self.editedItem.name,
+                                sheetsAmount: self.editedItem.sheetsAmount,
+                                type: self.editedItem.type
+                            }
+                        }).then().catch((err) => {
+                            console.log(err);
+                        })
                     }
                     this.close()
                 } else {
-                    this.nameError = false;
-                    setTimeout(() => {this.nameError = true}, 1);
+                    if(this.$refs.editName.value == '') {
+                        this.nameError = false;
+                        setTimeout(() => {
+                            this.nameError = true
+                        }, 1);
+                    }
+                    if(this.amountError){
+                        this.amountError = false;
+                        setTimeout(() => {
+                            this.amountError = true
+                        }, 1);
+                    }
+                    if(this.editedItem.type == '') {
+                        this.typeError = false;
+                        setTimeout(() => {
+                            this.typeError = true
+                        }, 1);
+                    }
                 }
             },
-            validateAmount() {
-                if (isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
-                    this.amountError = false;
+            validateSheetsAmount() {
+                if (this.editedItem.sheetsAmount == "") {
+                    this.sheetsAmountError = false;
                     setTimeout(() => {
-                        this.amountError = true;
+                        this.sheetsAmountError = true;
                     }, 1);
-                    this.changeAmountLabel = 'Количество должно быть числом больше 0';
+                    this.sheetsAmountLabel = 'Количество противень должно быть числом больше 0';
                 } else {
-                    this.amountError = false;
-                    this.changeAmountLabel = 'Количество';
+                    this.sheetsAmountError = false;
+                    this.sheetsAmountLabel = 'Количество противень';
                 }
             },
             close() {
@@ -160,16 +207,35 @@
                     this.editedIndex = -1
                 })
             },
-            saveInventory() {
-                throw 'not implemented';
+            getEquipment() {
+                const rw = this;
+                axios.get('http://127.0.0.1:5000/getEquipment').then((res) => {
+                    let resp = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let elem = {
+                            name: res.data[i][1],
+                            sheetsAmount: res.data[i][2],
+                            id: res.data[i][0],
+                            type: res.data[i][3],
+                        };
+                        resp.push(elem);
+                    }
+                    rw.globalItems = resp;
+                    rw.syncStuff();
+                }).catch((res) => {
+                    console.log(res);
+                })
+            },
+            syncStuff() {
+                this.items = this.globalItems;
             },
             getTableHeight() {
                 if (window.innerHeight <= 600) {
-                    this.tableHeight = window.innerHeight * 0.65;
-                } else if (window.innerHeight < 800) {
-                    this.tableHeight = window.innerHeight * 0.7;
-                } else {
                     this.tableHeight = window.innerHeight * 0.75;
+                } else if (window.innerHeight < 800) {
+                    this.tableHeight = window.innerHeight * 0.8;
+                } else {
+                    this.tableHeight = window.innerHeight * 0.85;
                 }
             },
             cancelClick() {
@@ -192,7 +258,7 @@
             window.removeEventListener("resize", this.getTableHeight);
         },
         mounted() {
-            this.items = this.globalItems;
+            this.getEquipment();
         }
     }
 </script>
@@ -203,16 +269,5 @@
         width: 80%;
         margin: auto;
         height: 10%;
-    }
-
-    #buttons {
-        display: flex;
-        width: 80%;
-        margin: auto;
-        justify-content: space-around;
-    }
-
-    .bts {
-        width: 150px;
     }
 </style>

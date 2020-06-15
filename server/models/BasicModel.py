@@ -80,6 +80,7 @@ class SQLModel:
                 sql_delete_query = """DELETE FROM {} where {}='{}'""".format(table, attr_cols, attr_values)
                 cursor.execute(sql_delete_query)
                 conn.commit()
+        return 'Ok'
 
 
 class BasicModel(SQLModel):

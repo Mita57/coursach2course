@@ -17,10 +17,19 @@
                                       append-icon="mdi-magnify" dense outlined label="Поиск"
                                       hide-details></v-text-field>
                         <v-spacer></v-spacer>
-                        <v-select dense :items="ovens" class="mt-4 mr-4" v-model="editedItem.type" label="Выберите печку" solo/>
+                        <v-select dense :items="ovens" class="mt-4 mr-4" v-model="oven" item-text="name" item-value="id"
+                                  @change="ovenSelected" label="Выберите печку" solo>
+                            <template slot="no-data">
+                                <div tabindex="-1" class="v-list-item theme--light">
+                                    <div class="v-list-item__content">Нет данных</div>
+                                </div>
+                            </template>
+                        </v-select>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
-                                <v-btn tile color="primary" dark class="mb-2" v-on="on">Добавить</v-btn>
+                                <v-btn tile color="primary" class="mb-2" v-on="on" :disabled="addButtonDisabled">
+                                    Добавить
+                                </v-btn>
                             </template>
                             <v-card>
                                 <v-card-title>
@@ -29,18 +38,31 @@
                                 <v-card-text>
                                     <v-container>
                                         <v-row>
-                                            <v-text-field dense v-model="editedItem.name" ref="editName" :error="nameError" label="Название"/>
+                                            <v-text-field dense v-model="editedItem.name"
+                                                          :error="nameError" label="Название" />
                                         </v-row>
                                         <v-row>
-
-                                            <v-text-field dense v-model="editedItem.amount"
-                                                          label="Количество"></v-text-field>
+                                            <v-text-field dense v-model="editedItem.temp" :error="tempError"
+                                                          label="Температура℃" type="number"></v-text-field>
                                         </v-row>
                                         <v-row>
-                                            <v-file-input dense accept="image/png, image/jpeg, image/bmp"
-                                                          placeholder="Добавьте изображение" prepend-icon="mdi-camera"
-                                                          label="Изображение"/>
+                                            <v-text-field dense v-model="editedItem.time" :error="timeError"
+                                                          label="Время(мин)" type="number"></v-text-field>
                                         </v-row>
+                                        <v-row>
+                                            <v-text-field dense v-model="editedItem.steam"
+                                                          @input="validatePercent('steam')" :error="steamError"
+                                                          label="Пар(%)" type="number"></v-text-field>
+                                        </v-row>
+                                        <v-row>
+                                            <v-text-field dense v-model="editedItem.dryness"
+                                                          @input="validatePercent('dryness')" :error="drynessError"
+                                                          label="Dry(%)" type="number"></v-text-field>
+                                        </v-row>
+                                        <v-row>
+                                            <v-text-field dense v-model="editedItem.fan"
+                                                          label="Скорость вентиляторов" type="number"></v-text-field>
+                                            <v-checkbox color="primary" v-model="editedItem.isP" label="P"></v-checkbox>
                                         </v-row>
                                     </v-container>
                                 </v-card-text>
@@ -68,114 +90,57 @@
             </v-data-table>
         </div>
 
-        <div id="buttons">
-            <v-btn large id="cancelButton" tile color="accent" style="color: #7e3179" class="mt-3 bts elevation-3"
-                   @click="cancelClick()">Отмена
-            </v-btn>
-            <v-btn large id="saveButton" tile color="primary" class="mt-3 bts elevation-3" @click="saveInventory()">
-                Сохранить
-            </v-btn>
-        </div>
     </div>
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "BakingProgs",
         data() {
             return {
                 search: '',
                 dialog: false,
+                addButtonDisabled: true,
                 tableHeight: 0,
                 headers: [
-                    {text: '', align: 'start', value: 'image'}, //img
                     {text: 'Название', align: 'start', value: 'name'},
-                    {text: 'Количество', align: 'start', value: 'amount'},
+                    {text: 'T℃', align: 'start', value: 'temp'},
+                    {text: 'Время(мин)', align: 'start', value: 'time'},
+                    {text: 'Пар(%)', align: 'start', value: 'steam'},
+                    {text: 'Dry(%)', align: 'start', value: 'dryness'},
+                    {text: 'Вентилятор', align: 'start', value: 'fan', sortable: false},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
-                globalItems: [
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                    {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    }, {
-                        image: require('../assets/bready_intro.jpg'),
-                        name: 'cock',
-                        amount: 3,
-                    },
-                ],
+                globalItems: [],
                 items: [],
-                ovens: ['Печка адын', 'Печка дыва'],
+                ovens: [],
+                oven: {},
                 nameError: false,
+                timeError: false,
+                tempError: false,
+                steamError: false,
+                drynessError: false,
                 editedIndex: -1,
                 editedItem: {
+                    id: 0,
                     name: '',
-                    amount: 1,
-                    image: '',
+                    temp: 1,
+                    time: 1,
+                    steam: '',
+                    dryness: '',
+                    fan: '',
+                    isP: false
                 },
                 defaultItem: {
                     name: '',
-                    amount: 1,
-                    image: '',
+                    temp: 1,
+                    time: 1,
+                    steam: '',
+                    dryness: '',
+                    fan: '',
+                    isP: false
                 },
                 date: new Date().toISOString().substr(0, 10),
                 arrayEvents: [`${new Date().getFullYear()}-12-31`,
@@ -197,24 +162,131 @@
                 this.dialog = true
             },
 
+            validatePercent(type) {
+                if (type == "steam") {
+                    if (this.editedItem.steam != "") {
+                        if (parseInt(this.editedItem.steam) < 0 || parseInt(this.editedItem.steam) > 100) {
+                            this.steamError = false;
+                            setTimeout(() => {
+                                this.steamError = true
+                            }, 1);
+                        } else {
+                            this.steamError = false;
+                        }
+
+                    } else {
+                        this.steamError = false;
+                    }
+                } else {
+                    if (this.editedItem.dryness != "") {
+                        if (parseInt(this.editedItem.dryness) < 0 || parseInt(this.editedItem.dryness) > 100) {
+                            this.drynessError = false;
+                            setTimeout(() => {
+                                this.drynessError = true
+                            }, 1);
+                        } else {
+                            this.drynessError = false;
+                        }
+
+                    } else {
+                        this.drynessError = false;
+                    }
+                }
+            },
             deleteItem(item) {
-                const index = this.items.indexOf(item)
-                const globalIndex = this.gloalItems.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) && this.globaiItems.splice(globalIndex, 1)
+                const globalIndex = this.globalItems.indexOf(item)
+                const id = this.globalItems[globalIndex].id;
+                const rw = this;
+
+                confirm('Удалить ' + this.globalItems[globalIndex].name + '?') && this.globalItems.splice(globalIndex, 1)
+                axios.get('http://127.0.0.1:5000/removeProg?id=' + id).then(() => {
+                    rw.searchFieldChanged();
+                }).catch((err) => {
+                    console.log(err);
+                })
             },
             save() {
-                if (this.$refs.editName.value != '' && !this.amountError) {
+                if (this.editedItem.name != '' && !this.steamError && !this.drynessError && this.editedItem.time != '' && this.editedItem.temp != '') {
                     this.nameError = false;
+                    this.tempError = false;
+                    this.timeError = false;
+                    
                     if (this.editedIndex > -1) {
-                        Object.assign(this.items[this.editedIndex], this.editedItem)
+                        Object.assign(this.items[this.editedIndex], this.editedItem);
+
+                        let self = this;
+                        let finalFan = this.editedItem.fan;
+                        if(this.editedItem.isP) {
+                            finalFan += "p";
+                        }
+
+                        axios.get('http://127.0.0.1:5000/editProg', {
+                            params: {
+                                id: self.editedItem.id,
+                                name: self.editedItem.name,
+                                temp: self.editedItem.temp,
+                                time: self.editedItem.time,
+                                steam: self.editedItem.steam,
+                                dryness: self.editedItem.dryness,
+                                fan:finalFan
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
                     } else {
                         this.items.push(this.editedItem)
+
+                        let self = this;
+                        let finalFan = this.editedItem.fan;
+                        if(this.editedItem.isP) {
+                            finalFan += "p";
+                        }
+
+                        axios.get('http://127.0.0.1:5000/addProg', {
+                            params: {
+                                ovenId: self.oven,
+                                name: self.editedItem.name,
+                                temp: self.editedItem.temp,
+                                time: self.editedItem.time,
+                                steam: self.editedItem.steam,
+                                dryness: self.editedItem.dryness,
+                                fan:finalFan
+                            }
+                        }).catch((err) => {
+                            console.log(err);
+                        })
                     }
                     this.close()
-                }
-                else {
-                    this.nameError = false;
-                    setTimeout(() => {this.nameError = true}, 1);
+                } else {
+                    if (this.editedItem.name == "") {
+                        this.nameError = false;
+                        setTimeout(() => {
+                            this.nameError = true
+                        }, 1);
+                    }
+                    else {
+                        this.nameError = false;
+                    }
+
+                    if (this.editedItem.time == "") {
+                        this.timeError = false;
+                        setTimeout(() => {
+                            this.timeError = true
+                        }, 1);
+                    }
+                    else {
+                        this.timeError = false;
+                    }
+
+                    if (this.editedItem.temp == "") {
+                        this.tempError = false;
+                        setTimeout(() => {
+                            this.tempError = true
+                        }, 1);
+                    }
+                    else {
+                        this.tempError = false;
+                    }
                 }
             },
             close() {
@@ -224,17 +296,72 @@
                     this.editedIndex = -1
                 })
             },
-            saveInventory() {
-                throw 'not implemented';
-            },
             getTableHeight() {
                 if (window.innerHeight <= 600) {
-                    this.tableHeight = window.innerHeight * 0.65;
-                } else if (window.innerHeight < 800) {
-                    this.tableHeight = window.innerHeight * 0.7;
-                } else {
                     this.tableHeight = window.innerHeight * 0.75;
+                } else if (window.innerHeight < 800) {
+                    this.tableHeight = window.innerHeight * 0.8;
+                } else {
+                    this.tableHeight = window.innerHeight * 0.85;
                 }
+            },
+            getOvens() {
+                const rw = this;
+                axios.get('http://127.0.0.1:5000/getEquipment').then((res) => {
+                    let resp = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let elem = {
+                            name: res.data[i][1],
+                            id: res.data[i][0],
+                        };
+                        resp.push(elem);
+                    }
+                    rw.ovens = resp;
+                }).catch((res) => {
+                    console.log(res);
+                })
+            },
+            ovenSelected() {
+                const rw = this;
+                axios.get('http://127.0.0.1:5000/getProgs', {
+                    params: {
+                        id: rw.oven
+                    }
+                }).then((res) => {
+                    let resp = [];
+                    for (let i = 0; i < res.data.length; i++) {
+                        let elem = {
+                            temp: res.data[i][1],
+                            id: res.data[i][0],
+                            time: res.data[i][2],
+                            steam: res.data[i][3],
+                            dryness: res.data[i][4],
+                            name: res.data[i][7],
+                        };
+                        let fan = "";
+                        let isP = false;
+                        let respFan = res.data[i][5];
+
+                        if(respFan.includes('p')) {
+                            fan = respFan.substring(0, respFan.length - 1);
+                            isP = true;
+                        }
+                        else {
+                            fan = respFan;
+                        }
+                        elem.isP = isP;
+                        elem.fan = fan;
+                        resp.push(elem);
+                    }
+                    rw.globalItems = resp;
+                    rw.syncStuff();
+                    rw.addButtonDisabled = false;
+                }).catch((res) => {
+                    console.log(res);
+                })
+            },
+            syncStuff() {
+                this.items = this.globalItems;
             },
             cancelClick() {
                 if (confirm('Отменить изменения?')) {
@@ -257,6 +384,7 @@
         },
         mounted() {
             this.items = this.globalItems;
+            this.getOvens();
         }
     }
 </script>
@@ -267,16 +395,5 @@
         width: 80%;
         margin: auto;
         height: 10%;
-    }
-
-    #buttons {
-        display: flex;
-        width: 80%;
-        margin: auto;
-        justify-content: space-around;
-    }
-
-    .bts {
-        width: 150px;
     }
 </style>

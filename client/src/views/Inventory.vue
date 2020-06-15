@@ -35,7 +35,7 @@
                                         <v-row>
                                             <v-col>
                                                 <v-text-field dense v-model="editedItem.amount" ref="editAmount"
-                                                              :error="amountError" @input="validateAmount()"
+                                                              :error="amountError" type="number" @input="validateAmount"
                                                               :label="changeAmountLabel"/>
                                             </v-col>
                                         </v-row>
@@ -116,11 +116,14 @@
             },
 
             deleteItem(item) {
-                const index = this.items.indexOf(item)
-                const globalIndex = this.globalItems.indexOf(item)
-                confirm('Удалить ' + this.items[index].name + '?') && this.items.splice(index, 1) &&
+                const rw = this;
+                const globalIndex = this.globalItems.indexOf(item);
+                const id = this.globalItems[globalIndex].id;
+                confirm('Удалить ' + this.globalItems[globalIndex].name + '?') &&
                 this.globalItems.splice(globalIndex, 1) &&
-                axios.get('http://127.0.0.1:5000/removeInventory?id=' + globalIndex).catch((err) => {
+                axios.get('http://127.0.0.1:5000/removeInventory?id=' + id).then(() => {
+                    rw.searchFieldChanged();
+                }).catch((err) => {
                     console.log(err);
                 })
             },
@@ -153,10 +156,18 @@
                     }
                     this.close()
                 } else {
-                    this.nameError = false;
-                    setTimeout(() => {
-                        this.nameError = true
-                    }, 1);
+                    if (this.$refs.editName.value == '') {
+                        this.nameError = false;
+                        setTimeout(() => {
+                            this.nameError = true
+                        }, 1);
+                    }
+                    if (this.amountError) {
+                        this.amountError = false;
+                        setTimeout(() => {
+                            this.amountError = true
+                        }, 1);
+                    }
                 }
             },
             getInventory() {
@@ -185,7 +196,7 @@
                 })
             },
             validateAmount() {
-                if (isNaN(this.editedItem.amount) || this.editedItem.amount <= 0) {
+                if (this.editedItem.amount == "") {
                     this.amountError = false;
                     setTimeout(() => {
                         this.amountError = true;
