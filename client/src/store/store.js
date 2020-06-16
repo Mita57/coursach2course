@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        username: 'cocksucker',
-        type:'admin',
+        username: 'dungeonMaster',
+        type:'baker',
         loggedIn:true
     },
     actions: {

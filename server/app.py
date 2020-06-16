@@ -199,32 +199,77 @@ def delete_employee():
     return 'ok'
 
 
-@app.route('/addDough')
+@app.route('/addSemiFinished')
 def add_dough():
     name = request.args.get('name')
     type = request.args.get('type')
-    SQLModel.insert('doughs', ('name', 'type'),
-                    (name, type))
+    is_dough = request.args.get('isDough')
+    SQLModel.insert('semi_finished', ('name', 'type', 'is_dough'),
+                    (name, type, is_dough))
     return 'ok'
 
 
-@app.route('/editDough')
+@app.route('/editSemiFinished')
 def edit_dough():
     name = request.args.get('name')
     type = request.args.get('type')
-    SQLModel.update_by_attrs('doughs', ('name', 'type'),
+    is_dough = request.args.get('isDough')
+    if type == 'NONE':
+        type = None
+    SQLModel.update_by_attrs('semi_finished', ('name', 'type'),
                              (name, email, type, pwrd), 'id', emp_id)
     return 'ok'
 
 
-@app.route('/getDoughs')
+@app.route('/getSemiFinished')
 def get_doughs():
-    stuff = SQLModel.get_by_attrs(cols=('type', 'name', 'id'), attr_cols='1', attr_values='1', table='doughs')
+    stuff = SQLModel.get_by_attrs(cols=('type', 'name', 'is_dough', 'id'), attr_cols='1', attr_values='1', table='semi_finished')
     return jsonify(stuff)
 
 
-@app.route('/deleteDough')
+@app.route('/removeSemiFinished')
 def delete_dough():
     d_id = request.args.get('id')
-    SQLModel.delete_by_attrs('doughs', 'id', d_id)
+    SQLModel.delete_by_attrs('semi_finished', 'id', d_id)
     return 'ok'
+
+
+
+@app.route('/getRecipes')
+def get_recipes():
+    stuff = SQLModel.get_by_attrs(cols=('name', 'dough', 'amount', 'weight', 'description', 'id', 'oven_type'),
+                                  attr_cols='1', attr_values='1', table='recipes')
+    return jsonify(stuff)
+
+
+@app.route('/editRecipe')
+def edit_recipe():
+    name = request.args.get('name')
+    dough = request.args.get('dough')
+    amount = request.args.get('amount')
+    weight = request.args.get('weight')
+    description = request.args.get('description')
+    rec_id = request.args.get('id')
+    oven_type = request.args.get('ovenType')
+    SQLModel.update_by_attrs('recipes', ('name', 'dough', 'amount', 'weight', 'description', 'oven_type'),
+                             (name, dough, amount, weight, description, oven_type), 'id', rec_id)
+    return 'ok'
+
+
+@app.route('/addRecipe')
+def add_recipe():
+    name = request.args.get('name')
+    dough = request.args.get('dough')
+    amount = request.args.get('amount')
+    weight = request.args.get('weight')
+    oven_type = request.args.get('ovenType')
+    description = request.args.get('description')
+    SQLModel.insert('recipes', ('name', 'dough', 'amount', 'weight', 'description', 'oven_type'),
+                    (name, dough, amount, weight, description, oven_type))
+    return 'ok'
+
+
+@app.route('/removeRecipe')
+def remove_recipe():
+    rec_id = request.args.get('id')
+    SQLModel.delete_by_attrs('recipes', 'id', rec_id)

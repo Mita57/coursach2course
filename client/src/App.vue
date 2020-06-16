@@ -27,13 +27,15 @@
                 </v-btn>
                 <v-btn v-if="$store.state.type=='cashier'" to="/kitchenSituation" text class=" white--text">Кухня
                 </v-btn>
+                <v-btn v-if="$store.state.type=='cashier'" to="/dayPlanBaker" text class=" white--text">План на день
+                </v-btn>
 
                 <!--baker-->
                 <v-btn v-if="$store.state.type=='baker'" to="/dayPlanBaker" text class=" white--text">План на день
                 </v-btn>
                 <v-btn v-if="$store.state.type=='baker'" to="/recipesBaker" text class=" white--text">Рецепты и ТТК
                 </v-btn>
-                <v-btn v-if="$store.state.type=='baker'" to="/instructions" text class=" white--text">Чек-лист</v-btn>
+                <v-btn v-if="$store.state.type=='baker'" to="/checklist" text class=" white--text">Чек-лист</v-btn>
 
             </v-toolbar-items>
             <v-spacer></v-spacer>

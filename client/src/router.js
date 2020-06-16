@@ -105,7 +105,6 @@ const router = new Router({
             path: '/dayPlanBaker',
             name: 'DayPlanBaker',
             component: DayPlanBaker,
-            beforeEnter: isBaker
         },
         {
             path: '/recipesBaker',

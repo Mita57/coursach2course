@@ -29,12 +29,13 @@
                                     <v-container>
                                         <v-row>
                                             <v-text-field dense v-model="editedItem.name" :error="nameError"
-                                                          ref="editName" label="Название"/>
+                                                           label="Название"/>
                                         </v-row>
                                         <v-row>
                                             <v-col>
                                                 <v-select dense :items="doughTypes" v-model="editedItem.type" :error="typeError"
-                                                          ref="editType" label="Тип теста" solo/>
+                                                           label="Тип теста" :disabled="!editedItem.isDough" solo/>
+                                                <v-checkbox color="primary" v-model="editedItem.isDough" label="Тесто"></v-checkbox>
                                             </v-col>
                                         </v-row>
                                         <v-row>
@@ -54,6 +55,10 @@
 
                         </v-dialog>
                     </v-toolbar>
+                </template>
+                <template v-slot:item.isDough="{ item }">
+                    <div v-if="item.isDough"> {{item.type}} </div>
+                    <div v-else> - </div>
                 </template>
                 <template v-slot:item.actions="{ item }">
                     <v-icon small class="mr-2" @click="editItem(item)">
@@ -90,7 +95,7 @@
                 headers: [
                     {text: '', align: 'start', value: 'image'}, //img
                     {text: 'Название', align: 'start', value: 'name'},
-                    {text: 'Тип', align: 'start', value: 'type'},
+                    {text: 'Тесто', align: 'start', value: 'isDough'},
                     {text: 'Действия', align: 'start', value: 'actions', sortable: false},
                 ],
                 globalItems: [],
@@ -100,12 +105,14 @@
                     name: '',
                     image: '',
                     type: '',
+                    isDough: false,
                     id: 0
                 },
                 defaultItem: {
                     name: '',
                     image: '',
-                    type: ''
+                    type: '',
+                    isDough: false,
                 },
             }
         },
@@ -124,23 +131,27 @@
                 const id = this.globalItems[globalIndex].id;
                 confirm('Удалить ' + this.globalItems[globalIndex].name + '?') &&
                 this.globalItems.splice(globalIndex, 1) &&
-                axios.get('http://127.0.0.1:5000/removeDough?id=' + id).then(() => {
+                axios.get('http://127.0.0.1:5000/removeSemiFinished?id=' + id).then(() => {
                     rw.searchFieldChanged();
                 }).catch((err) => {
                     console.log(err);
                 })
             },
             save() {
-                if (this.$refs.editName.value != '' && !this.editedItem.type == '') {
+                if(!this.editedItem.isDough) {
+                    this.editedItem.type = 'Дрожжевое';
+                }
+                if (this.editedItem.name != '') {
                     this.nameError = false;
                     if (this.editedIndex > -1) {
                         Object.assign(this.items[this.editedIndex], this.editedItem);
                         let self = this;
-                        axios.get('http://127.0.0.1:5000/editDough', {
+                        axios.get('http://127.0.0.1:5000/editSemiFinished', {
                             params: {
                                 name: self.editedItem.name,
                                 type: self.editedItem.type,
                                 id: self.editedItem.id,
+                                isDough:self.editedItem.isDough,
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -148,10 +159,11 @@
                     } else {
                         this.items.push(this.editedItem)
                         let self = this;
-                        axios.get('http://127.0.0.1:5000/addDough', {
+                        axios.get('http://127.0.0.1:5000/addSemiFinished', {
                             params: {
                                 name: self.editedItem.name,
-                                type: self.editedItem.type
+                                type: self.editedItem.type,
+                                isDough: self.editedItem.isDough
                             }
                         }).then().catch((err) => {
                             console.log(err);
@@ -159,16 +171,10 @@
                     }
                     this.close()
                 } else {
-                    if(this.$refs.editName.value == '') {
+                    if(this.editedItem.name == '') {
                         this.nameError = false;
                         setTimeout(() => {
                             this.nameError = true
-                        }, 1);
-                    }
-                    if(this.editedItem.type == '') {
-                        this.typeError = false;
-                        setTimeout(() => {
-                            this.typeError = true
                         }, 1);
                     }
                 }
@@ -182,13 +188,14 @@
             },
             getDoughs() {
                 const rw = this;
-                axios.get('http://127.0.0.1:5000/getDoughs').then((res) => {
+                axios.get('http://127.0.0.1:5000/getSemiFinished').then((res) => {
                     let resp = [];
                     for (let i = 0; i < res.data.length; i++) {
                         let elem = {
-                            name: res.data[i][0],
-                            type: res.data[i][1],
-                            id: res.data[i][2]
+                            name: res.data[i][1],
+                            type: res.data[i][0],
+                            id: res.data[i][3],
+                            isDough: res.data[i][2],
                         };
                         resp.push(elem);
                     }
