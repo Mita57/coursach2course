@@ -17,6 +17,7 @@ import OnlineOrders from "./views/OnlineOrders";
 import KitchenSituation from "./views/KitchenSituation";
 import Profile from "./views/Profile";
 import BakingProgs from "./views/BakingProgs";
+import SemiFinished from "./views/SemiFinished";
 
 Vue.use(Router);
 
@@ -83,6 +84,12 @@ const router = new Router({
             beforeEnter: isAdmin
         },
         {
+            path: '/semiFinished',
+            name:'SemiFinished',
+            component: SemiFinished,
+            beforeEnter:isAdmin
+        },
+        {
             path: '/recipes',
             name: 'Recipes',
             component: Recipes,
@@ -95,16 +102,16 @@ const router = new Router({
             beforeEnter: isAdmin
         },
         {
-            path:'/dayPlanBaker',
+            path: '/dayPlanBaker',
             name: 'DayPlanBaker',
             component: DayPlanBaker,
             beforeEnter: isBaker
         },
         {
-          path: '/recipesBaker',
-          name: 'RecipesBaker',
-          component: RecipesBaker,
-          beforeEnter: isBaker
+            path: '/recipesBaker',
+            name: 'RecipesBaker',
+            component: RecipesBaker,
+            beforeEnter: isBaker
         },
         {
             path: '/checklist',
@@ -151,11 +158,12 @@ const isCashier = (to, from, next) => {
         next();
         return
     }
-    next('/invalid');recipesBaker
+    next('/invalid');
+    recipesBaker
 }
 
 const isAuth = (to, from, next) => {
-    if(store.state.loggedIn) {
+    if (store.state.loggedIn) {
         next();
         return;
     }

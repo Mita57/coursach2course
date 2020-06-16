@@ -41,16 +41,6 @@
                                           solo ref="editDough" :error="doughError"/>
                             </v-row>
                             <v-row>
-                                <v-select :items="bakingProgs" v-model="editedItem.bakingProg" label="Программа" dense
-                                          solo ref="editProg" :error="progError">
-                                    <template slot="no-data">
-                                        <div tabindex="-1" class="v-list-item theme--light">
-                                            <div class="v-list-item__content">Нет данных</div>
-                                        </div>
-                                    </template>
-                                </v-select>
-                            </v-row>
-                            <v-row>
                                 <v-select :items="ovenTypes" v-model="editedItem.ovenType" label="Тип печки" dense
                                           solo ref="editOven" :error="ovenError"/>
                             </v-row>
@@ -70,6 +60,7 @@
                     </v-card-actions>
 
                 </v-card>
+
             </v-dialog>
 
 

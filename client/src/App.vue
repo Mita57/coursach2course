@@ -16,6 +16,8 @@
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/bakingProgs" text class=" white--text">Программы выпечки
                 </v-btn>
+                <v-btn v-if="$store.state.type=='admin'" to="/semiFinished" text class=" white--text">Полуфабрикаты
+                </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/recipes" text class=" white--text">Рецепты и ТТК
                 </v-btn>
                 <v-btn v-if="$store.state.type=='admin'" to="/employees" text class=" white--text">Сотрудники</v-btn>

@@ -197,3 +197,34 @@ def delete_employee():
     bp_id = request.args.get('id')
     SQLModel.delete_by_attrs('users', 'id', bp_id)
     return 'ok'
+
+
+@app.route('/addDough')
+def add_dough():
+    name = request.args.get('name')
+    type = request.args.get('type')
+    SQLModel.insert('doughs', ('name', 'type'),
+                    (name, type))
+    return 'ok'
+
+
+@app.route('/editDough')
+def edit_dough():
+    name = request.args.get('name')
+    type = request.args.get('type')
+    SQLModel.update_by_attrs('doughs', ('name', 'type'),
+                             (name, email, type, pwrd), 'id', emp_id)
+    return 'ok'
+
+
+@app.route('/getDoughs')
+def get_doughs():
+    stuff = SQLModel.get_by_attrs(cols=('type', 'name', 'id'), attr_cols='1', attr_values='1', table='doughs')
+    return jsonify(stuff)
+
+
+@app.route('/deleteDough')
+def delete_dough():
+    d_id = request.args.get('id')
+    SQLModel.delete_by_attrs('doughs', 'id', d_id)
+    return 'ok'
